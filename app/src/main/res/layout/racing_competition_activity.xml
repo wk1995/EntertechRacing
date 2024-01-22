@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/racing_rate"
+    tools:context=".RacingCompetitionActivity">
+
+    <ImageView
+        android:id="@+id/ivCompetitionSetting"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="56dp"
+        android:src="@drawable/racing_setting_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCompetitionTrack"
+        android:layout_width="233dp"
+        android:layout_height="47dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/racing_btn_bg_black"
+        android:gravity="center"
+        android:text="@string/racing_track"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivCompetitionSetting"
+        app:layout_constraintEnd_toStartOf="@id/ivCompetitionSetting"
+        app:layout_constraintTop_toTopOf="@id/ivCompetitionSetting" />
+
+
+    <TextView
+        android:id="@+id/tvCompetitionHandBand"
+        android:layout_width="233dp"
+        android:layout_height="47dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/racing_btn_bg_black"
+        android:gravity="center"
+        android:text="@string/racing_headband"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivCompetitionSetting"
+        app:layout_constraintEnd_toStartOf="@id/tvCompetitionTrack"
+        app:layout_constraintTop_toTopOf="@id/ivCompetitionSetting" />
+
+    <TextView
+        android:id="@+id/tvCompetitionFinish"
+        android:layout_width="233dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="56dp"
+        android:background="@drawable/racing_btn_bg_black"
+        android:gravity="center"
+        android:text="@string/racing_competition_finish"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivCompetitionStatus"
+        android:layout_width="1408dp"
+        android:layout_height="632dp"
+        android:src="@drawable/racing_rate_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvBlueAttention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="234dp"
+        android:layout_marginTop="246dp"
+        android:text="@string/racing_attention_value"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/ivCompetitionStatus"
+        app:layout_constraintTop_toTopOf="@id/ivCompetitionStatus" />
+
+    <TextView
+        android:id="@+id/tvBlueAttentionValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="64sp"
+        app:layout_constraintEnd_toEndOf="@id/tvBlueAttention"
+        app:layout_constraintStart_toStartOf="@id/tvBlueAttention"
+        app:layout_constraintTop_toBottomOf="@id/tvBlueAttention"
+        tools:text="80" />
+
+    <TextView
+        android:id="@+id/tvRedAttention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="234dp"
+        android:text="@string/racing_attention_value"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvBlueAttention"
+        app:layout_constraintEnd_toEndOf="@id/ivCompetitionStatus"
+        app:layout_constraintTop_toTopOf="@id/tvBlueAttention" />
+
+    <TextView
+        android:id="@+id/tvRedAttentionValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="64sp"
+        app:layout_constraintEnd_toEndOf="@id/tvRedAttention"
+        app:layout_constraintStart_toStartOf="@id/tvRedAttention"
+        app:layout_constraintTop_toBottomOf="@id/tvRedAttention"
+        tools:text="80" />
+
+
+    <TextView
+        android:id="@+id/tvStartCompetition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/racing_start_competition_bg"
+        android:gravity="center"
+        android:text="@string/racing_start_competition"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@id/ivCompetitionStatus"
+        app:layout_constraintStart_toStartOf="@id/ivCompetitionStatus"
+        app:layout_constraintTop_toBottomOf="@id/ivCompetitionStatus" />
+
+    <TextView
+        android:id="@+id/tvRacingErrorBlueConnected"
+        android:layout_width="254dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/racing_error_bg"
+        android:gravity="center"
+        android:text="@string/racing_error_headband_connected"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/tvBlueAttentionValue"
+        app:layout_constraintStart_toStartOf="@id/tvBlueAttentionValue"
+        app:layout_constraintTop_toBottomOf="@id/ivCompetitionStatus" />
+
+    <TextView
+        android:id="@+id/tvRacingErrorTrackConnected"
+        android:layout_width="254dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/racing_error_bg"
+        android:gravity="center"
+        android:text="@string/racing_error_track_connected"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/ivCompetitionStatus"
+        app:layout_constraintStart_toStartOf="@id/ivCompetitionStatus"
+        app:layout_constraintTop_toBottomOf="@id/ivCompetitionStatus" />
+
+
+    <TextView
+        android:id="@+id/tvRacingErrorRedConnected"
+        android:layout_width="254dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/racing_error_bg"
+        android:gravity="center"
+        android:text="@string/racing_error_headband_connected"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/tvRedAttention"
+        app:layout_constraintStart_toStartOf="@id/tvRedAttention"
+        app:layout_constraintTop_toBottomOf="@id/ivCompetitionStatus" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="56dp"
+        android:src="@drawable/racing_enter_tech"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

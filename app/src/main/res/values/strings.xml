@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">EntertechRacing</string>
+    <string name="racing_track">轨道</string>
+    <string name="racing_headband">脑电头环</string>
+    <string name="racing_competition_finish">结束</string>
+    <string name="racing_start_competition">开始竞速</string>
+    <string name="racing_error_headband_connected">请先连接头环</string>
+    <string name="racing_error_headband_wear">请先佩戴头环</string>
+    <string name="racing_error_track_connected">请先连接轨道</string>
+    <string name="racing_attention_value">注意力值</string>
 </resources>
