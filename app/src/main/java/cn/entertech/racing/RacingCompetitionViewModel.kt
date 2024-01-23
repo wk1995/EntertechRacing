@@ -12,6 +12,8 @@ class RacingCompetitionViewModel : ViewModel() {
         HashMap<String, BaseBleConnectManager>()
     }
 
+    private var currentStatus: RacingStatus = RacingStatus.PRE_COMPETITION
+
     fun connectBlueDevice() {
 
     }

@@ -56,7 +56,7 @@ class RacingCompetitionActivity : BaseActivity() {
         val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
         val pictureDrawable = PictureDrawable(svg.renderToPicture())
         ivCompetitionStatus?.setImageDrawable(pictureDrawable)
-
+        updateUI()
     }
 
     /**
@@ -87,6 +87,17 @@ class RacingCompetitionActivity : BaseActivity() {
             } else {
                 View.VISIBLE
             }
+
+        tvStartCompetition?.visibility =
+            if (
+                ((viewModel.blueIsConnected() && viewModel.blueIsWear())
+                        || (viewModel.redIsConnected() && viewModel.redIsWear())) && viewModel.trackIsConnected()
+            ) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
     }
 
     override fun onClick(v: View?) {
