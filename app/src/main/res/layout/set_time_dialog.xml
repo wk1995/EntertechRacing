@@ -19,8 +19,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <cn.entertech.racing.wediget.PickerView
-        android:id="@+id/pvTime"
+    <FrameLayout
+        android:id="@+id/flDialogContain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="6dp"

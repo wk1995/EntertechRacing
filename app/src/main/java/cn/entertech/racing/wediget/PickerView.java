@@ -23,7 +23,7 @@ import android.view.View;
  *
  * @author chenjing
  */
-public class PickerView extends View {
+public class PickerView<T> extends View {
 
     public static final String TAG = "PickerView";
     /**
@@ -35,11 +35,11 @@ public class PickerView extends View {
      */
     public static final float SPEED = 2;
 
-    private List<String> mDataList;
+    private List<T> mDataList;
     /**
      * 选中的位置，这个位置是mDataList的中心位置，一直不变
      */
-    private int mCurrentSelected;
+    private int mCurrentSelectedPosition;
     private Paint mPaint;
 
     private float mMaxTextSize = 80;
@@ -59,11 +59,11 @@ public class PickerView extends View {
      */
     private float mMoveLen = 0;
     private boolean isInit = false;
-    private onSelectListener mSelectListener;
+    private onSelectListener<T> mSelectListener;
     private Timer timer;
     private MyTimerTask mTask;
 
-    private Handler updateHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler updateHandler = new Handler(Looper.getMainLooper()) {
 
         @Override
         public void handleMessage(Message msg) {
@@ -92,33 +92,33 @@ public class PickerView extends View {
         init();
     }
 
-    public void setOnSelectListener(onSelectListener listener) {
+    public void setOnSelectListener(onSelectListener<T> listener) {
         mSelectListener = listener;
     }
 
     private void performSelect() {
         if (mSelectListener != null)
-            mSelectListener.onSelect(mDataList.get(mCurrentSelected));
+            mSelectListener.onSelect(mDataList.get(mCurrentSelectedPosition));
     }
 
-    public void setData(List<String> datas) {
+    public void setData(List<T> datas) {
         mDataList = datas;
-        mCurrentSelected = datas.size() / 2;
+        mCurrentSelectedPosition = datas.size() / 2;
         invalidate();
     }
 
-    public void setSelected(int selected) {
-        mCurrentSelected = selected;
+    public void setSelectedPosition(int position) {
+        mCurrentSelectedPosition = position;
     }
 
     private void moveHeadToTail() {
-        String head = mDataList.get(0);
+        T head = mDataList.get(0);
         mDataList.remove(0);
         mDataList.add(head);
     }
 
     private void moveTailToHead() {
-        String tail = mDataList.get(mDataList.size() - 1);
+        T tail = mDataList.get(mDataList.size() - 1);
         mDataList.remove(mDataList.size() - 1);
         mDataList.add(0, tail);
     }
@@ -137,7 +137,7 @@ public class PickerView extends View {
 
     private void init() {
         timer = new Timer();
-        mDataList = new ArrayList<String>();
+        mDataList = new ArrayList<T>();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Style.FILL);
         mPaint.setTextAlign(Align.CENTER);
@@ -164,13 +164,13 @@ public class PickerView extends View {
         FontMetricsInt fmi = mPaint.getFontMetricsInt();
         float baseline = (float) (y - (fmi.bottom / 2.0 + fmi.top / 2.0));
 
-        canvas.drawText(mDataList.get(mCurrentSelected), x, baseline, mPaint);
+        canvas.drawText(mDataList.get(mCurrentSelectedPosition).toString(), x, baseline, mPaint);
         // 绘制上方data
-        for (int i = 1; (mCurrentSelected - i) >= 0; i++) {
+        for (int i = 1; (mCurrentSelectedPosition - i) >= 0; i++) {
             drawOtherText(canvas, i, -1);
         }
         // 绘制下方data
-        for (int i = 1; (mCurrentSelected + i) < mDataList.size(); i++) {
+        for (int i = 1; (mCurrentSelectedPosition + i) < mDataList.size(); i++) {
             drawOtherText(canvas, i, 1);
         }
 
@@ -191,7 +191,7 @@ public class PickerView extends View {
         float y = (float) (mViewHeight / 2.0 + type * d);
         FontMetricsInt fmi = mPaint.getFontMetricsInt();
         float baseline = (float) (y - (fmi.bottom / 2.0 + fmi.top / 2.0));
-        canvas.drawText(mDataList.get(mCurrentSelected + type * position),
+        canvas.drawText(mDataList.get(mCurrentSelectedPosition + type * position).toString(),
                 (float) (mViewWidth / 2.0), baseline, mPaint);
     }
 
@@ -277,7 +277,7 @@ public class PickerView extends View {
 
     }
 
-    public interface onSelectListener {
-        void onSelect(String text);
+    public interface onSelectListener<T> {
+        void onSelect(T text);
     }
 }

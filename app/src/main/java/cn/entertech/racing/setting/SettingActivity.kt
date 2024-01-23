@@ -1,6 +1,5 @@
 package cn.entertech.racing.setting
 
-import android.app.TimePickerDialog
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
@@ -59,7 +58,10 @@ class SettingActivity : BaseActivity(), IRecyclerViewItemClickListener {
     }
 
     override fun onItemClick(rv: RecyclerView?, clickView: View, index: Int) {
-        val item = mSettingListAdapter.getItemId(index)
-        SetTimeDialog().show(supportFragmentManager, "")
+        val item = mSettingListAdapter.getItemByPosition(index)
+        item.showDialog(this){
+            mSettingListAdapter.notifyItemChanged(index)
+        }
+
     }
 }

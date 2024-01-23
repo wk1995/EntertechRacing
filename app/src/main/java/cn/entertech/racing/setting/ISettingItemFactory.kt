@@ -1,27 +1,35 @@
 package cn.entertech.racing.setting
 
 import android.content.Context
+import cn.entertech.racing.base.BaseActivity
 
 abstract class ISettingItemFactory<T> {
 
-    protected abstract var value: T
+    protected var memoryValue: T? = null
 
     abstract fun getNameResId(): Int
 
     abstract fun getKey(): String
 
-    abstract fun saveValue(value: T)
 
-    abstract fun getDefault(): T
+    abstract fun getValue(): T
 
-    fun getMemoryValue(): T = value
+    /**
+     * @return true 保存成功
+     * */
+    abstract fun saveValue(t: T): Boolean
 
-    abstract fun getDiskValue(): T
+
+    protected abstract fun getDefault(): T
+
 
     fun getShowText(context: Context): String =
         "${
             context.getString(
                 getNameResId()
             )
-        }|${value}"
+        }|${getValue()}"
+
+
+    abstract fun showDialog(context: BaseActivity,change:()->Unit)
 }
