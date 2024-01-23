@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import cn.entertech.ble.BaseBleConnectManager
 import cn.entertech.racing.setting.SettingActivity
+import cn.entertech.racing.setting.SettingType
 
 class RacingCompetitionViewModel : ViewModel() {
 
@@ -36,10 +37,15 @@ class RacingCompetitionViewModel : ViewModel() {
         //如果有至少一个头环的mac地址
         val intent =
             if (hasHeadbandMac()) {
-                Intent(context, ConnectedActivity::class.java)
-
+                val intent = Intent(context, ConnectedActivity::class.java)
+                intent
             } else {
-                Intent(context, MacActivity::class.java)
+                val intent = Intent(context, SettingActivity::class.java)
+                intent.putExtra(
+                    SettingType.BUNDLE_KEY_SETTING_TYPE,
+                    SettingType.SETTINGS_HEADBAND_MAC.typeName
+                )
+                intent
             }
         context.startActivity(intent)
     }

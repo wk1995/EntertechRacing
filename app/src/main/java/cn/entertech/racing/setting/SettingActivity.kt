@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.entertech.racing.IRecyclerViewItemClickListener
 import cn.entertech.racing.R
 import cn.entertech.racing.base.BaseActivity
+import cn.entertech.racing.setting.SettingType.Companion.BUNDLE_KEY_SETTING_TYPE
 import kotlinx.coroutines.launch
 
 
@@ -23,6 +24,7 @@ class SettingActivity : BaseActivity(), IRecyclerViewItemClickListener {
     private val mSettingListAdapter by lazy {
         SettingListAdapter(listener = this)
     }
+
 
     private var ivSettingBack: ImageView? = null
     private var rvSettingList: RecyclerView? = null
@@ -45,8 +47,26 @@ class SettingActivity : BaseActivity(), IRecyclerViewItemClickListener {
                 mSettingListAdapter.replace(it)
             }
         }
+        val settingType = intent.getStringExtra(BUNDLE_KEY_SETTING_TYPE) ?: ""
+        when (SettingType.getSettingTypeByName(settingType)) {
+            SettingType.SETTINGS_SYSTEM -> {
+                settingViewModel.initSettingItems(this)
+            }
 
-        settingViewModel.initSettingItems(this)
+            SettingType.SETTINGS_HEADBAND_MAC -> {
+                settingViewModel.initHeadbandMacSettings()
+            }
+
+            SettingType.SETTINGS_TRACK_MAC -> {
+                settingViewModel.initTrackMacSettings()
+            }
+
+            else -> {
+                finish()
+            }
+
+        }
+
     }
 
     override fun onClick(v: View?) {
@@ -59,7 +79,7 @@ class SettingActivity : BaseActivity(), IRecyclerViewItemClickListener {
 
     override fun onItemClick(rv: RecyclerView?, clickView: View, index: Int) {
         val item = mSettingListAdapter.getItemByPosition(index)
-        item.showDialog(this){
+        item.showDialog(this) {
             mSettingListAdapter.notifyItemChanged(index)
         }
 
