@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import cn.entertech.racing.IRecyclerViewItemClickListener
 import cn.entertech.racing.R
 
-class SettingListAdapter(private var itemList: List<ISettingItemFactory<*>> = ArrayList()) :
+class SettingListAdapter(
+    private var itemList: List<ISettingItemFactory<*>> = ArrayList(),
+    private val listener: IRecyclerViewItemClickListener? = null
+) :
     RecyclerView.Adapter<SettingListAdapter.SettingListVH>() {
     class SettingListVH(rootView: View, val textView: TextView) : RecyclerView.ViewHolder(rootView)
+
+    private var target: RecyclerView? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingListVH {
         val rootView = LayoutInflater.from(parent.context)
@@ -22,6 +28,9 @@ class SettingListAdapter(private var itemList: List<ISettingItemFactory<*>> = Ar
     override fun onBindViewHolder(holder: SettingListVH, position: Int) {
         val text = holder.textView
         text.text = itemList[position].getShowText(text.context)
+        holder.itemView.setOnClickListener {
+            listener?.onItemClick(target, holder.itemView, position)
+        }
     }
 
     override fun getItemCount() = itemList.size
@@ -32,4 +41,10 @@ class SettingListAdapter(private var itemList: List<ISettingItemFactory<*>> = Ar
         itemList = newData
         notifyDataSetChanged()
     }
+
+    fun getData(): List<ISettingItemFactory<*>> {
+        return itemList
+    }
+
+    fun getItemByPosition(position: Int) = itemList[position]
 }

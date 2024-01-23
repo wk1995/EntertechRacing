@@ -16,4 +16,7 @@
     <string name="racing_setting_item_time_each_round">每局时间</string>
     <string name="racing_setting_item_celebrate_threshold">庆祝条件&#8212;阈值</string>
     <string name="racing_setting_item_time_threshold">庆祝条件&#8212;时间</string>
+    <string name="racing_setting_set_time">设置时间</string>
+    <string name="racing_setting_dialog_cancel">取消</string>
+    <string name="racing_setting_dialog_ok">确定</string>
 </resources>

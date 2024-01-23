@@ -47,6 +47,10 @@ dependencies {
     implementation("com.caverock:androidsvg:1.4")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+//    implementation("com.contrarywind:Android-PickerView:4.1.7")
+//    implementation("com.contrarywind:wheelview:4.1.0")
+    implementation("com.github.weidongjian:androidWheelView:1.0.0")
+
 
 
 }
