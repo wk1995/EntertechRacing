@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import cn.entertech.ble.BaseBleConnectManager
+import cn.entertech.racing.setting.SettingActivity
 
 class RacingCompetitionViewModel : ViewModel() {
 

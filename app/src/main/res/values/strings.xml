@@ -8,4 +8,12 @@
     <string name="racing_error_headband_wear">请先佩戴头环</string>
     <string name="racing_error_track_connected">请先连接轨道</string>
     <string name="racing_attention_value">注意力值</string>
+    <string name="racing_setting">设置</string>
+    <string name="racing_setting_item_blue_headband">蓝色头环</string>
+    <string name="racing_setting_item_red_headband">红色头环</string>
+    <string name="racing_setting_item_track_red_threshold">轨道阈值-红</string>
+    <string name="racing_setting_item_track_blue_threshold">轨道阈值-蓝</string>
+    <string name="racing_setting_item_time_each_round">每局时间</string>
+    <string name="racing_setting_item_celebrate_threshold">庆祝条件&#8212;阈值</string>
+    <string name="racing_setting_item_time_threshold">庆祝条件&#8212;时间</string>
 </resources>

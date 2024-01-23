@@ -4,6 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingActivity">
+    android:background="@drawable/racing_rate"
+    tools:context=".setting.SettingActivity">
 
+    <ImageView
+        android:id="@+id/ivSettingBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/racing_settings_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/racing_setting"
+        android:textColor="#FFE6E0E9"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivSettingBack"
+        app:layout_constraintStart_toEndOf="@id/ivSettingBack"
+        app:layout_constraintTop_toTopOf="@id/ivSettingBack" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSettingList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="290dp"
+        android:layout_marginEnd="144dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

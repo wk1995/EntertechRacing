@@ -32,12 +32,10 @@ class RacingCompetitionActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.racing_competition_activity)
-
-
         initView()
     }
 
-    private fun initView() {
+    override fun initView() {
         ivCompetitionStatus = findViewById(R.id.ivCompetitionStatus)
         ivCompetitionSetting = findViewById(R.id.ivCompetitionSetting)
         tvCompetitionTrack = findViewById(R.id.tvCompetitionTrack)
@@ -53,6 +51,7 @@ class RacingCompetitionActivity : BaseActivity() {
         tvStartCompetition?.setOnClickListener(this)
         tvCompetitionFinish?.setOnClickListener(this)
         tvCompetitionHandBand?.setOnClickListener(this)
+        ivCompetitionSetting?.setOnClickListener(this)
 
         val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
         val pictureDrawable = PictureDrawable(svg.renderToPicture())

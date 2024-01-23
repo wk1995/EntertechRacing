@@ -7,8 +7,6 @@ import cn.entertech.racing.base.BaseActivity
  * 连接页面
  * */
 class ConnectedActivity : BaseActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.racing_connected_activity)
-    }
+
+    override fun getLayoutResID()=R.layout.racing_connected_activity
 }
