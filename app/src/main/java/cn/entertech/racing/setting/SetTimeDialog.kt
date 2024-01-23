@@ -10,9 +10,16 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import cn.entertech.racing.R
+import cn.entertech.racing.log.EntertechRacingLog
+import cn.entertech.racing.wediget.PickerView
 
 
 class SetTimeDialog : DialogFragment() {
+    private var pvTime: PickerView? = null
+
+    companion object {
+        private const val TAG = "SetTimeDialog"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,7 +28,18 @@ class SetTimeDialog : DialogFragment() {
     ): View? {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return inflater.inflate(R.layout.set_time_dialog, container, false)
+        val rootView = inflater.inflate(R.layout.set_time_dialog, container, false)
+        pvTime = rootView.findViewById(R.id.pvTime)
+        val data = ArrayList<String>()
+        for (i in 0..10) {
+            data.add(i.toString())
+        }
+        pvTime?.setData(data)
+        pvTime?.setOnSelectListener {
+            EntertechRacingLog.d(TAG, "select $it")
+        }
+
+        return rootView
     }
 
     override fun onResume() {

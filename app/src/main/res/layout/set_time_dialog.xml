@@ -6,15 +6,28 @@
     android:background="@drawable/dialog_bg">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
+        android:paddingVertical="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="18dp"
         android:text="@string/racing_setting_set_time"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <cn.entertech.racing.wediget.PickerView
+        android:id="@+id/pvTime"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@id/tvDialogCancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDialogTitle" />
 
     <TextView
         android:id="@+id/tvDialogCancel"
