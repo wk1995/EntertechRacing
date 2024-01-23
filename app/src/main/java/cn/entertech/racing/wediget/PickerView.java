@@ -111,6 +111,10 @@ public class PickerView<T> extends View {
         mCurrentSelectedPosition = position;
     }
 
+    public T getSelectedData() {
+        return mDataList.get(mCurrentSelectedPosition);
+    }
+
     private void moveHeadToTail() {
         T head = mDataList.get(0);
         mDataList.remove(0);

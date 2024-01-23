@@ -36,7 +36,13 @@ object SettingTimeEachRound : ISettingItemFactory<Int>() {
     override fun getDefault() = 60
 
     override fun showDialog(context: BaseActivity, change: () -> Unit) {
-
+        DoublePickDialog {
+            if (it != memoryValue) {
+                if (saveValue(it)) {
+                    change()
+                }
+            }
+        }.show(context.supportFragmentManager, "")
     }
 
     override fun getShowText(context: Context): String {
