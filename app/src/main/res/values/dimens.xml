@@ -405,6 +405,7 @@
 	<dimen name="d550dp">550dp</dimen>
 	<dimen name="d1100dp">1100dp</dimen>
 
+	<dimen name="s6sp">6sp</dimen>
 	<dimen name="s8sp">8sp</dimen>
 	<dimen name="s10sp">10sp</dimen>
 	<dimen name="s12sp">12sp</dimen>
