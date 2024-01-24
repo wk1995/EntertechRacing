@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/racing_rate"
-    tools:context=".ConnectedActivity">
+    tools:context=".connect.ConnectedActivity">
 
     <ImageView
         android:id="@+id/ivConnectBack"
@@ -31,6 +31,7 @@
         android:id="@+id/clTrackConnect"
         android:layout_width="@dimen/d550dp"
         android:layout_height="@dimen/d250dp"
+        android:visibility="gone"
         android:background="@drawable/connect_track_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +109,6 @@
         android:layout_height="@dimen/d250dp"
         android:layout_marginEnd="@dimen/d50dp"
         android:background="@drawable/connect_blue_headband_bg"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ivRedHeadbandConnect"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -193,7 +193,6 @@
         android:layout_width="@dimen/d250dp"
         android:layout_height="@dimen/d250dp"
         android:background="@drawable/connect_red_headband_bg"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivBlueHeadbandConnect"
