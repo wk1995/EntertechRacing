@@ -86,7 +86,7 @@ class RacingCompetitionViewModel : ViewModel() {
      * 有至少一个头环的mac地址
      * */
     fun hasHeadbandMac(): Boolean = true
-    fun hasTrackMac(): Boolean = false
+    fun hasTrackMac(): Boolean = true
 
     fun blueIsConnected(): Boolean = false
     fun redIsConnected(): Boolean = false

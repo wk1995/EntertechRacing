@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import cn.entertech.racing.base.BaseActivity
 import cn.entertech.racing.device.DeviceType
+import cn.entertech.racing.log.EntertechRacingLog
 import cn.entertech.racing.setting.SettingActivity
 import cn.entertech.racing.setting.SettingType
 
@@ -13,6 +14,10 @@ import cn.entertech.racing.setting.SettingType
  * 连接页面
  * */
 class ConnectedActivity : BaseActivity() {
+    companion object {
+        private const val TAG = "ConnectedActivity"
+    }
+
     private var ivConnectBack: ImageView? = null
     private var ivConnectSettings: ImageView? = null
 
@@ -46,6 +51,8 @@ class ConnectedActivity : BaseActivity() {
         clTrackConnect = findViewById(R.id.clTrackConnect)
         ivConnectSettings = findViewById(R.id.ivConnectSettings)
         tvBlueHeadbandConnectStatus = findViewById(R.id.tvBlueHeadbandConnectStatus)
+        ivBlueHeadbandConnect = findViewById(R.id.ivBlueHeadbandConnect)
+        ivRedHeadbandConnect = findViewById(R.id.ivRedHeadbandConnect)
         tvFindBlueHeadband = findViewById(R.id.tvFindBlueHeadband)
         tvFindBlueHeadbandHint = findViewById(R.id.tvFindBlueHeadbandHint)
         ivConnectBlueHeadbandLoading = findViewById(R.id.ivConnectBlueHeadbandLoading)
@@ -68,6 +75,7 @@ class ConnectedActivity : BaseActivity() {
         super.initData()
         deviceTypeName =
             intent.getStringExtra(RacingCompetitionViewModel.BUNDLE_KEY_DEVICE_TYPE) ?: ""
+        EntertechRacingLog.d(TAG, "deviceTypeName: $deviceTypeName")
         if (deviceTypeName == DeviceType.DEVICE_TYPE_HEADBAND.name) {
             ivBlueHeadbandConnect?.visibility = View.VISIBLE
             ivRedHeadbandConnect?.visibility = View.VISIBLE
