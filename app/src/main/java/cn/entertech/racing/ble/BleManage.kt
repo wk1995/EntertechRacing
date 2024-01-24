@@ -7,6 +7,10 @@ import cn.entertech.racing.RacingApplication
 
 object BleManage {
 
+    private val blueDisconnectListener = ArrayList<(String) -> Unit>()
+    private val redDisconnectListener = ArrayList<(String) -> Unit>()
+    private val trackDisconnectListener = ArrayList<(String) -> Unit>()
+
     private val blueBleConnectManager by lazy {
         MultipleBiomoduleBleManager(RacingApplication.getInstance())
     }
@@ -15,13 +19,9 @@ object BleManage {
         MultipleBiomoduleBleManager(RacingApplication.getInstance())
     }
 
-    
-
-
     private val trackBleConnectManager by lazy {
         MultipleBiomoduleBleManager(RacingApplication.getInstance())
     }
-
 
     fun blueIsConnect() = blueBleConnectManager.isConnected()
 
@@ -74,6 +74,39 @@ object BleManage {
         failure: ((String) -> Unit)?
     ) {
         connectBleDevice(trackBleConnectManager, successConnect, failure)
+    }
+
+    fun addBlueDisconnectListener(listener: (String) -> Unit) {
+        blueDisconnectListener.add(listener)
+        if (blueDisconnectListener.size == 1) {
+            blueBleConnectManager.addDisConnectListener { tips ->
+                blueDisconnectListener.forEach {
+                    it(tips)
+                }
+            }
+        }
+    }
+
+    fun addRedDisconnectListener(listener: (String) -> Unit) {
+        redDisconnectListener.add(listener)
+        if (redDisconnectListener.size == 1) {
+            redBleConnectManager.addDisConnectListener { tips ->
+                redDisconnectListener.forEach {
+                    it(tips)
+                }
+            }
+        }
+    }
+
+    fun addTrackDisconnectListener(listener: (String) -> Unit) {
+        trackDisconnectListener.add(listener)
+        if (trackDisconnectListener.size == 1) {
+            trackBleConnectManager.addDisConnectListener { tips ->
+                trackDisconnectListener.forEach {
+                    it(tips)
+                }
+            }
+        }
     }
 
 
