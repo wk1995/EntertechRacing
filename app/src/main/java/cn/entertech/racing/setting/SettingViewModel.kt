@@ -11,6 +11,7 @@ import cn.entertech.racing.setting.item.SetItemCelebrateTime
 import cn.entertech.racing.setting.item.SettingTimeEachRound
 import cn.entertech.racing.setting.item.TrackBlueThreshold
 import cn.entertech.racing.setting.item.TrackRedThreshold
+import cn.entertech.racing.track.SetItemTrackFactory
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -27,6 +28,9 @@ class SettingViewModel : ViewModel() {
 
     private val headbandFactories by lazy {
         listOf(RedHeadBandFactory, BlueHeadBandFactory)
+    }
+    private val setItemTrackFactories by lazy {
+        listOf(SetItemTrackFactory)
     }
 
 
@@ -53,6 +57,11 @@ class SettingViewModel : ViewModel() {
     }
 
     fun initTrackMacSettings() {
+        viewModelScope.launch {
+            settingItemFactories.forEach {
 
+            }
+            _settingItems.emit(setItemTrackFactories)
+        }
     }
 }

@@ -49,6 +49,7 @@ class RacingCompetitionActivity : BaseActivity() {
         tvRacingErrorRedConnected = findViewById(R.id.tvRacingErrorRedConnected)
 
         tvStartCompetition?.setOnClickListener(this)
+        tvCompetitionTrack?.setOnClickListener(this)
         tvCompetitionFinish?.setOnClickListener(this)
         tvCompetitionHandBand?.setOnClickListener(this)
         ivCompetitionSetting?.setOnClickListener(this)
