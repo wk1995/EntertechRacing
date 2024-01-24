@@ -57,6 +57,11 @@ class RacingCompetitionActivity : BaseActivity() {
         val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
         val pictureDrawable = PictureDrawable(svg.renderToPicture())
         ivCompetitionStatus?.setImageDrawable(pictureDrawable)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         updateUI()
     }
 

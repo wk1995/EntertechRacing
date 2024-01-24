@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import cn.entertech.ble.BaseBleConnectManager
+import cn.entertech.racing.ble.BleManage
 import cn.entertech.racing.connect.ConnectedActivity
 import cn.entertech.racing.device.DeviceType
 import cn.entertech.racing.setting.SettingActivity
@@ -89,9 +90,9 @@ class RacingCompetitionViewModel : ViewModel() {
     fun hasHeadbandMac(): Boolean = true
     fun hasTrackMac(): Boolean = true
 
-    fun blueIsConnected(): Boolean = false
-    fun redIsConnected(): Boolean = false
-    fun trackIsConnected(): Boolean = false
+    fun blueIsConnected(): Boolean = BleManage.blueIsConnect()
+    fun redIsConnected(): Boolean = BleManage.redIsConnect()
+    fun trackIsConnected(): Boolean = BleManage.trackIsConnect()
 
     fun blueIsWear(): Boolean = false
     fun redIsWear(): Boolean = false

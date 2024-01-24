@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import cn.entertech.ble.ConnectionBleStrategy
 import cn.entertech.ble.multiple.MultipleBiomoduleBleManager
 import cn.entertech.racing.RacingApplication
+import cn.entertech.racing.ble.BleManage
 import cn.entertech.racing.log.EntertechRacingLog
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,19 +15,6 @@ class ConnectDeviceViewModel : ViewModel() {
 
     companion object {
         private const val TAG = "ConnectDeviceViewModel"
-    }
-
-    private val blueBleConnectManager by lazy {
-        MultipleBiomoduleBleManager(RacingApplication.getInstance())
-    }
-
-    private val redBleConnectManager by lazy {
-        MultipleBiomoduleBleManager(RacingApplication.getInstance())
-    }
-
-
-    private val trackBleConnectManager by lazy {
-        MultipleBiomoduleBleManager(RacingApplication.getInstance())
     }
 
     private val _connectBlueResult = MutableSharedFlow<Unit>()
@@ -39,15 +27,15 @@ class ConnectDeviceViewModel : ViewModel() {
     val connectTrackResult = _connectTrackResult.asSharedFlow()
 
 
-    fun blueIsConnect() = blueBleConnectManager.isConnected()
+    fun blueIsConnect() = BleManage.blueIsConnect()
 
-    fun redIsConnect() = redBleConnectManager.isConnected()
+    fun redIsConnect() = BleManage.redIsConnect()
 
-    fun trackIsConnect() = trackBleConnectManager.isConnected()
+    fun trackIsConnect() = BleManage.trackIsConnect()
 
     fun connectBlueDevice() {
         EntertechRacingLog.d(TAG, "connectBlueDevice")
-        blueBleConnectManager.connectDevice({
+        BleManage.connectBlueDevice({
             EntertechRacingLog.d(TAG, "connect Blue success $it")
             viewModelScope.launch {
                 _connectBlueResult.emit(Unit)
@@ -57,12 +45,12 @@ class ConnectDeviceViewModel : ViewModel() {
             viewModelScope.launch {
                 _connectBlueResult.emit(Unit)
             }
-        }, ConnectionBleStrategy.SCAN_AND_CONNECT_HIGH_SIGNAL)
+        })
     }
 
     fun connectRedDevice() {
         EntertechRacingLog.d(TAG, "connectRedDevice")
-        redBleConnectManager.connectDevice({
+        BleManage.connectRedDevice({
             EntertechRacingLog.d(TAG, "connect Red success $it")
             viewModelScope.launch {
                 _connectRedResult.emit(Unit)
@@ -72,12 +60,12 @@ class ConnectDeviceViewModel : ViewModel() {
             viewModelScope.launch {
                 _connectRedResult.emit(Unit)
             }
-        }, ConnectionBleStrategy.SCAN_AND_CONNECT_HIGH_SIGNAL)
+        })
     }
 
     fun connectTrackDevice() {
         EntertechRacingLog.d(TAG, "connectTrackDevice")
-        trackBleConnectManager.connectDevice({
+        BleManage.connectTrackDevice({
             EntertechRacingLog.i(TAG, "connect Track success $it")
             viewModelScope.launch {
                 _connectTrackResult.emit(Unit)
@@ -87,19 +75,19 @@ class ConnectDeviceViewModel : ViewModel() {
             viewModelScope.launch {
                 _connectTrackResult.emit(Unit)
             }
-        }, ConnectionBleStrategy.SCAN_AND_CONNECT_HIGH_SIGNAL)
+        })
     }
 
-    fun findBlueHeadband(){
-        blueBleConnectManager.findConnectedDevice()
+    fun findBlueHeadband() {
+        BleManage.findBlueHeadband()
     }
 
-    fun findRedHeadband(){
-        redBleConnectManager.findConnectedDevice()
+    fun findRedHeadband() {
+        BleManage.findRedHeadband()
     }
 
-    fun findTrack(){
-        trackBleConnectManager.findConnectedDevice()
+    fun findTrack() {
+        BleManage.findRedHeadband()
     }
 
 }
