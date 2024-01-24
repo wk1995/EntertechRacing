@@ -4,6 +4,247 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/racing_rate"
     tools:context=".ConnectedActivity">
+
+    <ImageView
+        android:id="@+id/ivConnectBack"
+        android:layout_width="@dimen/d128dp"
+        android:layout_height="@dimen/d128dp"
+        android:layout_marginStart="@dimen/d16dp"
+        android:padding="@dimen/d40dp"
+        android:src="@drawable/racing_settings_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivConnectSettings"
+        android:layout_width="@dimen/d180dp"
+        android:layout_height="@dimen/d180dp"
+        android:layout_marginEnd="@dimen/d16dp"
+        android:padding="@dimen/d40dp"
+        android:src="@drawable/racing_setting_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ivBlueHeadbandConnect"
+        android:layout_width="@dimen/d500dp"
+        android:layout_height="@dimen/d500dp"
+        android:layout_marginEnd="@dimen/d100dp"
+        android:background="@drawable/connect_blue_headband_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivRedHeadbandConnect"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivBlueHeadbandPic"
+            android:layout_width="@dimen/d338dp"
+            android:layout_height="@dimen/d120dp"
+            android:layout_marginTop="@dimen/d50dp"
+            android:src="@drawable/device_headband_pic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvBlueHeadbandName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/racing_headband_blue"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivBlueHeadbandPic" />
+
+        <TextView
+            android:id="@+id/tvBlueHeadbandConnectStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d48dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s48sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBlueHeadbandName"
+            tools:text="已连接" />
+
+        <TextView
+            android:id="@+id/tvFindBlueHeadband"
+            android:layout_width="@dimen/d95dp"
+            android:layout_height="@dimen/d35dp"
+            android:layout_marginTop="@dimen/d50dp"
+            android:background="@drawable/racing_find_device_btn_bg"
+            android:gravity="center"
+            android:text="@string/racing_find_device"
+            android:textColor="@color/black"
+            android:textSize="@dimen/s14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBlueHeadbandConnectStatus" />
+
+        <TextView
+            android:id="@+id/tvFindBlueHeadbandHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d8dp"
+            android:text="@string/racing_find_device_hint"
+            android:textColor="#F4F5F9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFindBlueHeadband" />
+
+        <ImageView
+            android:id="@+id/ivConnectBlueHeadbandLoading"
+            android:layout_width="@dimen/d56dp"
+            android:layout_height="@dimen/d56dp"
+            android:layout_marginTop="@dimen/d16dp"
+            android:src="@drawable/racing_connect_device_loading"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBlueHeadbandConnectStatus" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ivRedHeadbandConnect"
+        android:layout_width="@dimen/d500dp"
+        android:layout_height="@dimen/d500dp"
+        android:background="@drawable/connect_red_headband_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivBlueHeadbandConnect"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivRedHeadbandPic"
+            android:layout_width="@dimen/d338dp"
+            android:layout_height="@dimen/d120dp"
+            android:layout_marginTop="@dimen/d50dp"
+            android:src="@drawable/device_headband_pic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvRedHeadbandName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/racing_headband_red"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivRedHeadbandPic" />
+
+        <TextView
+            android:id="@+id/tvRedHeadbandConnectStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d48dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s48sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRedHeadbandName"
+            tools:text="连接中..." />
+
+        <TextView
+            android:id="@+id/tvFindRedHeadband"
+            android:layout_width="@dimen/d95dp"
+            android:layout_height="@dimen/d35dp"
+            android:layout_marginTop="@dimen/d50dp"
+            android:background="@drawable/racing_find_device_btn_bg"
+            android:gravity="center"
+            android:text="@string/racing_find_device"
+            android:textColor="@color/black"
+            android:textSize="@dimen/s14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRedHeadbandConnectStatus" />
+
+        <TextView
+            android:id="@+id/tvFindRedHeadbandHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d8dp"
+            android:text="@string/racing_find_device_hint"
+            android:textColor="#F4F5F9"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFindRedHeadband" />
+
+        <ImageView
+            android:id="@+id/ivConnectRedHeadbandLoading"
+            android:layout_width="@dimen/d56dp"
+            android:layout_height="@dimen/d56dp"
+            android:layout_marginTop="@dimen/d16dp"
+            android:src="@drawable/racing_connect_device_loading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRedHeadbandConnectStatus" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clConnectDeviceHint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d130dp"
+        android:layout_marginBottom="@dimen/d56dp"
+        android:background="@drawable/racing_connect_device_hint_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tvConnectDeviceHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d91dp"
+            android:layout_marginTop="@dimen/d20dp"
+            android:text="@string/racing_connected_hint"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvConnectDeviceHintContent1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d14dp"
+            android:layout_marginBottom="@dimen/d38dp"
+            android:paddingStart="@dimen/d91dp"
+            android:text="@string/racing_connect_headband_hint_content1"
+            android:textColor="#F4F5F9"
+            android:textSize="@dimen/s24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvConnectDeviceHintContent2"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvConnectDeviceHint" />
+
+        <TextView
+            android:id="@+id/tvConnectDeviceHintContent2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/racing_connect_headband_hint_content2"
+            android:textColor="#F4F5F9"
+            android:textSize="@dimen/s24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/tvConnectDeviceHintContent1"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

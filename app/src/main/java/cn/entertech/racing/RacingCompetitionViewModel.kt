@@ -4,10 +4,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import cn.entertech.ble.BaseBleConnectManager
+import cn.entertech.racing.device.DeviceType
 import cn.entertech.racing.setting.SettingActivity
 import cn.entertech.racing.setting.SettingType
 
 class RacingCompetitionViewModel : ViewModel() {
+
+    companion object {
+        const val BUNDLE_KEY_DEVICE_TYPE = "deviceType"
+    }
 
     private val blueManagerMap by lazy {
         HashMap<String, BaseBleConnectManager>()
@@ -38,6 +43,7 @@ class RacingCompetitionViewModel : ViewModel() {
         val intent =
             if (hasHeadbandMac()) {
                 val intent = Intent(context, ConnectedActivity::class.java)
+                intent.putExtra(BUNDLE_KEY_DEVICE_TYPE, DeviceType.DEVICE_TYPE_HEADBAND.name)
                 intent
             } else {
                 val intent = Intent(context, SettingActivity::class.java)
@@ -53,7 +59,9 @@ class RacingCompetitionViewModel : ViewModel() {
     fun gotoTrack(context: Context) {
         val intent =
             if (hasTrackMac()) {
-                Intent(context, ConnectedActivity::class.java)
+                val intent = Intent(context, ConnectedActivity::class.java)
+                intent.putExtra(BUNDLE_KEY_DEVICE_TYPE, DeviceType.DEVICE_TYPE_TRACK.name)
+                intent
             } else {
                 val intent = Intent(context, SettingActivity::class.java)
                 intent.putExtra(
@@ -77,7 +85,7 @@ class RacingCompetitionViewModel : ViewModel() {
     /**
      * 有至少一个头环的mac地址
      * */
-    fun hasHeadbandMac(): Boolean = false
+    fun hasHeadbandMac(): Boolean = true
     fun hasTrackMac(): Boolean = false
 
     fun blueIsConnected(): Boolean = false

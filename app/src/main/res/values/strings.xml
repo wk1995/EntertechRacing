@@ -21,4 +21,19 @@
     <string name="racing_setting_dialog_cancel">取消</string>
     <string name="racing_setting_set_mac_hint">请输入mac地址</string>
     <string name="racing_setting_dialog_ok">确定</string>
+    <string name="racing_headband_blue">脑电头环 (Blue)</string>
+    <string name="racing_headband_red">脑电头环 (Red)</string>
+    <string name="racing_find_device">查找设备</string>
+    <string name="racing_find_device_hint">点击按钮，设备指示灯会闪烁 2 次</string>
+    <string name="racing_device_has_connected">已连接</string>
+    <string name="racing_connected_hint">连接提示</string>
+    <string name="racing_connect_headband_hint_content1">1.长按设备按键至蓝灯闪烁。\n
+2.如果长按开关，指示灯没有亮起，请先充电 10 分钟后再试一次。</string>
+    <string name="racing_connect_headband_hint_content2">3.如蓝牙已开启，请关闭并重新打开。\n
+4.确保头环在平板附近，且远离其他可能产生干扰的蓝牙设备。\n
+5.尝试再次连接头环。如果还是不行，请重启平板。</string>
+
+    <string name="racing_connect_track_hint_content1">1.请确保轨道已经通电。\n
+2.检查轨道控制盒指示灯是否闪烁，连接成功后指示灯会常亮。</string>
+    <string name="racing_connect_track_hint_content2">3.平板和轨道距离不要超过 2 米。</string>
 </resources>
