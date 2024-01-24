@@ -9,10 +9,10 @@
 
     <ImageView
         android:id="@+id/ivSettingBack"
-        android:layout_width="@dimen/d48dp"
-        android:layout_height="@dimen/d48dp"
-        android:layout_marginStart="@dimen/d56dp"
-        android:layout_marginTop="@dimen/d40dp"
+        android:layout_width="@dimen/d64dp"
+        android:layout_height="@dimen/d64dp"
+        android:layout_marginStart="@dimen/d8dp"
+        android:padding="@dimen/d20dp"
         android:src="@drawable/racing_settings_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,10 +20,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/d8dp"
+        android:layout_marginStart="@dimen/d4dp"
         android:text="@string/racing_setting"
         android:textColor="#FFE6E0E9"
-        android:textSize="@dimen/s22sp"
+        android:textSize="@dimen/s10sp"
         app:layout_constraintBottom_toBottomOf="@id/ivSettingBack"
         app:layout_constraintStart_toEndOf="@id/ivSettingBack"
         app:layout_constraintTop_toTopOf="@id/ivSettingBack" />
@@ -32,9 +32,9 @@
         android:id="@+id/rvSettingList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/d144dp"
-        android:layout_marginTop="@dimen/d290dp"
-        android:layout_marginEnd="@dimen/d144dp"
+        android:layout_marginStart="@dimen/d72dp"
+        android:layout_marginTop="@dimen/d145dp"
+        android:layout_marginEnd="@dimen/d72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="@dimen/d40dp">
+    android:paddingHorizontal="@dimen/d20dp">
 
     <EditText
         android:id="@+id/etMacAddress"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/d56dp"
+        android:layout_height="@dimen/d28dp"
         android:layout_gravity="center"
+        android:textSize="@dimen/s10sp"
         android:background="@drawable/set_item_set_mac_bg"
         android:hint="@string/racing_setting_set_mac_hint"
         android:textColorHint="#49454F" />

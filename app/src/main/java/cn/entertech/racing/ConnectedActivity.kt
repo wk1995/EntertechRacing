@@ -59,6 +59,9 @@ class ConnectedActivity : BaseActivity() {
         tvFindTrackHint = findViewById(R.id.tvFindTrackHint)
         tvFindTrack = findViewById(R.id.tvFindTrack)
         ivConnectTrackLoading = findViewById(R.id.ivConnectTrackLoading)
+
+        ivConnectBack?.setOnClickListener(this)
+        ivConnectSettings?.setOnClickListener(this)
     }
 
     override fun initData() {

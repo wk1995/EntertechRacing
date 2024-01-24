@@ -6,28 +6,28 @@
 
     <cn.entertech.racing.wediget.PickerView
         android:id="@+id/pvCelebrateTimeMin"
-        android:layout_width="@dimen/d60dp"
+        android:layout_width="@dimen/d30dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/d40dp"
+        android:layout_marginStart="@dimen/d20dp"
         app:layout_constraintEnd_toStartOf="@id/tvCelebrateTimeMin"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvCelebrateTimeMin"
-        android:layout_width="@dimen/d60dp"
+        android:layout_width="@dimen/d30dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="分"
         android:textColor="@color/white"
-        android:textSize="@dimen/s20sp"
+        android:textSize="@dimen/s10sp"
         app:layout_constraintEnd_toStartOf="@id/pvCelebrateTimeSecond"
         app:layout_constraintStart_toEndOf="@id/pvCelebrateTimeMin"
         app:layout_constraintTop_toTopOf="parent" />
 
     <cn.entertech.racing.wediget.PickerView
         android:id="@+id/pvCelebrateTimeSecond"
-        android:layout_width="@dimen/d60dp"
+        android:layout_width="@dimen/d30dp"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toStartOf="@id/tvCelebrateTimeSecond"
         app:layout_constraintStart_toEndOf="@id/tvCelebrateTimeMin"
@@ -35,13 +35,13 @@
 
     <TextView
         android:id="@+id/tvCelebrateTimeSecond"
-        android:layout_width="@dimen/d60dp"
+        android:layout_width="@dimen/d30dp"
         android:layout_height="match_parent"
-        android:layout_marginEnd="@dimen/d40dp"
+        android:layout_marginEnd="@dimen/d20dp"
         android:gravity="center"
         android:text="秒"
         android:textColor="@color/white"
-        android:textSize="@dimen/s20sp"
+        android:textSize="@dimen/s10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/pvCelebrateTimeSecond"
         app:layout_constraintTop_toTopOf="parent" />
