@@ -87,7 +87,7 @@ class ConnectDeviceViewModel : ViewModel() {
     }
 
     fun findTrack() {
-        BleManage.findRedHeadband()
+        BleManage.findTrack()
     }
 
 }
