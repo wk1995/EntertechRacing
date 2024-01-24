@@ -22,9 +22,6 @@
             android:name=".SettlementActivity"
             android:exported="false" />
         <activity
-            android:name=".MacActivity"
-            android:exported="false" />
-        <activity
             android:name=".ConnectedActivity"
             android:exported="false" />
         <activity
