@@ -1,17 +1,16 @@
 package cn.entertech.racing.headband
 
-import cn.entertech.racing.R
 import cn.entertech.racing.SharedPreferencesUtil
 import cn.entertech.racing.base.BaseActivity
 import cn.entertech.racing.log.EntertechRacingLog
 import cn.entertech.racing.setting.ISettingItemFactory
 
-object HeadBandFactory : ISettingItemFactory<String>() {
-    private const val TAG = "HeadBandFactory"
-    private const val HEAD_BAND_MAC = "HeadBandFactory"
-    override fun getNameResId() = R.string.racing_setting_item_red_headband
+abstract class BaseHeadBandFactory : ISettingItemFactory<String>() {
 
-    override fun getKey() = HEAD_BAND_MAC
+    companion object{
+        private const val TAG = "HeadBandFactory"
+    }
+
 
     override fun getValue(): String = memoryValue ?: SharedPreferencesUtil.getString(
         getKey(),
@@ -35,6 +34,12 @@ object HeadBandFactory : ISettingItemFactory<String>() {
     }
 
     override fun showDialog(context: BaseActivity, change: () -> Unit) {
-        EditMacAddressDialog().show(context.supportFragmentManager, "")
+        EditMacAddressDialog {
+            if (it != memoryValue) {
+                if (saveValue(it)) {
+                    change()
+                }
+            }
+        }.show(context.supportFragmentManager, "")
     }
 }

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/d40dp">
 
-</EditText>
+    <EditText
+        android:id="@+id/etMacAddress"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d56dp"
+        android:layout_gravity="center"
+        android:background="@drawable/set_item_set_mac_bg"
+        android:hint="@string/racing_setting_set_mac_hint"
+        android:textColorHint="#49454F" />
+</LinearLayout>

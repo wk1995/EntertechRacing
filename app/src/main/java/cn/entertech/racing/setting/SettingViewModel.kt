@@ -3,7 +3,9 @@ package cn.entertech.racing.setting
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.entertech.racing.headband.HeadBandFactory
+import cn.entertech.racing.headband.BaseHeadBandFactory
+import cn.entertech.racing.headband.BlueHeadBandFactory
+import cn.entertech.racing.headband.RedHeadBandFactory
 import cn.entertech.racing.setting.item.SetItemCelebrateThreshold
 import cn.entertech.racing.setting.item.SetItemCelebrateTime
 import cn.entertech.racing.setting.item.SettingTimeEachRound
@@ -24,7 +26,7 @@ class SettingViewModel : ViewModel() {
     }
 
     private val headbandFactories by lazy {
-        listOf(HeadBandFactory)
+        listOf(RedHeadBandFactory, BlueHeadBandFactory)
     }
 
 
@@ -50,7 +52,7 @@ class SettingViewModel : ViewModel() {
         }
     }
 
-    fun initTrackMacSettings(){
+    fun initTrackMacSettings() {
 
     }
 }

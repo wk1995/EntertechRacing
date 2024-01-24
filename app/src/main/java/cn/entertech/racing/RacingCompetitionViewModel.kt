@@ -55,13 +55,22 @@ class RacingCompetitionViewModel : ViewModel() {
             if (hasTrackMac()) {
                 Intent(context, ConnectedActivity::class.java)
             } else {
-                Intent(context, MacActivity::class.java)
+                val intent = Intent(context, SettingActivity::class.java)
+                intent.putExtra(
+                    SettingType.BUNDLE_KEY_SETTING_TYPE,
+                    SettingType.SETTINGS_TRACK_MAC.typeName
+                )
+                intent
             }
         context.startActivity(intent)
     }
 
     fun gotoSetting(context: Context) {
         val intent = Intent(context, SettingActivity::class.java)
+        intent.putExtra(
+            SettingType.BUNDLE_KEY_SETTING_TYPE,
+            SettingType.SETTINGS_SYSTEM.typeName
+        )
         context.startActivity(intent)
     }
 

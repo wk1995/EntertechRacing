@@ -17,7 +17,7 @@ import cn.entertech.racing.R
 
 open class BaseDialogFragment() : DialogFragment(), OnClickListener {
     private var flDialogContain: FrameLayout? = null
-    private var tvDialogTitle: TextView? = null
+    protected var tvDialogTitle: TextView? = null
     private var tvDialogCancel: TextView? = null
     private var tvDialogOk: TextView? = null
 
