@@ -20,7 +20,7 @@
         android:gravity="center"
         android:text="分"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/s20sp"
         app:layout_constraintEnd_toStartOf="@id/pvCelebrateTimeSecond"
         app:layout_constraintStart_toEndOf="@id/pvCelebrateTimeMin"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +41,7 @@
         android:gravity="center"
         android:text="秒"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/s20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/pvCelebrateTimeSecond"
         app:layout_constraintTop_toTopOf="parent" />

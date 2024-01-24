@@ -26,7 +26,7 @@
         android:gravity="center"
         android:text="@string/racing_track"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="@dimen/s30sp"
         app:layout_constraintBottom_toBottomOf="@id/ivCompetitionSetting"
         app:layout_constraintEnd_toStartOf="@id/ivCompetitionSetting"
         app:layout_constraintTop_toTopOf="@id/ivCompetitionSetting" />
@@ -41,7 +41,7 @@
         android:gravity="center"
         android:text="@string/racing_headband"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="@dimen/s30sp"
         app:layout_constraintBottom_toBottomOf="@id/ivCompetitionSetting"
         app:layout_constraintEnd_toStartOf="@id/tvCompetitionTrack"
         app:layout_constraintTop_toTopOf="@id/ivCompetitionSetting" />
@@ -57,7 +57,7 @@
         android:visibility="gone"
         android:text="@string/racing_competition_finish"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="@dimen/s30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,7 +79,7 @@
         android:layout_marginTop="246dp"
         android:text="@string/racing_attention_value"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/s16sp"
         app:layout_constraintStart_toStartOf="@id/ivCompetitionStatus"
         app:layout_constraintTop_toTopOf="@id/ivCompetitionStatus" />
 
@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:textSize="64sp"
+        android:textSize="@dimen/s64sp"
         app:layout_constraintEnd_toEndOf="@id/tvBlueAttention"
         app:layout_constraintStart_toStartOf="@id/tvBlueAttention"
         app:layout_constraintTop_toBottomOf="@id/tvBlueAttention"
@@ -101,7 +101,7 @@
         android:layout_marginEnd="234dp"
         android:text="@string/racing_attention_value"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/s16sp"
         app:layout_constraintBottom_toBottomOf="@id/tvBlueAttention"
         app:layout_constraintEnd_toEndOf="@id/ivCompetitionStatus"
         app:layout_constraintTop_toTopOf="@id/tvBlueAttention" />
@@ -111,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:textSize="64sp"
+        android:textSize="@dimen/s64sp"
         app:layout_constraintEnd_toEndOf="@id/tvRedAttention"
         app:layout_constraintStart_toStartOf="@id/tvRedAttention"
         app:layout_constraintTop_toBottomOf="@id/tvRedAttention"
@@ -127,7 +127,7 @@
         android:gravity="center"
         android:text="@string/racing_start_competition"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="@dimen/s30sp"
         app:layout_constraintEnd_toEndOf="@id/ivCompetitionStatus"
         app:layout_constraintStart_toStartOf="@id/ivCompetitionStatus"
         app:layout_constraintTop_toBottomOf="@id/ivCompetitionStatus" />
@@ -141,7 +141,7 @@
         android:gravity="center"
         android:text="@string/racing_error_headband_connected"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/s20sp"
         app:layout_constraintEnd_toEndOf="@id/tvBlueAttentionValue"
         app:layout_constraintStart_toStartOf="@id/tvBlueAttentionValue"
         app:layout_constraintTop_toBottomOf="@id/ivCompetitionStatus" />
@@ -155,7 +155,7 @@
         android:gravity="center"
         android:text="@string/racing_error_track_connected"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/s20sp"
         app:layout_constraintEnd_toEndOf="@id/ivCompetitionStatus"
         app:layout_constraintStart_toStartOf="@id/ivCompetitionStatus"
         app:layout_constraintTop_toBottomOf="@id/ivCompetitionStatus" />
@@ -170,7 +170,7 @@
         android:gravity="center"
         android:text="@string/racing_error_headband_connected"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/s20sp"
         app:layout_constraintEnd_toEndOf="@id/tvRedAttention"
         app:layout_constraintStart_toStartOf="@id/tvRedAttention"
         app:layout_constraintTop_toBottomOf="@id/ivCompetitionStatus" />

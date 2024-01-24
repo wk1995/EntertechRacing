@@ -60,8 +60,8 @@ open class BaseDialogFragment() : DialogFragment(), OnClickListener {
     override fun onResume() {
         val params: ViewGroup.LayoutParams =
             dialog?.window?.attributes ?: WindowManager.LayoutParams()
-        params.width = resources.getDimensionPixelSize(R.dimen.dp343)
-        params.height = resources.getDimensionPixelSize(R.dimen.dp346)
+        params.width = resources.getDimensionPixelSize(R.dimen.d343dp)
+        params.height = resources.getDimensionPixelSize(R.dimen.d346dp)
         dialog?.window?.attributes = params as WindowManager.LayoutParams
         super.onResume()
     }

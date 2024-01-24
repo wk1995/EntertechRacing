@@ -15,7 +15,7 @@
         android:paddingEnd="18dp"
         android:text="@string/racing_setting_set_time"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/s20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,7 +39,7 @@
         android:gravity="center"
         android:text="@string/racing_setting_dialog_cancel"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/s16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -53,7 +53,7 @@
         android:gravity="center"
         android:text="@string/racing_setting_dialog_ok"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/s16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

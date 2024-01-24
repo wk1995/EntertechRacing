@@ -23,7 +23,7 @@
         android:layout_marginStart="8dp"
         android:text="@string/racing_setting"
         android:textColor="#FFE6E0E9"
-        android:textSize="22sp"
+        android:textSize="@dimen/s22sp"
         app:layout_constraintBottom_toBottomOf="@id/ivSettingBack"
         app:layout_constraintStart_toEndOf="@id/ivSettingBack"
         app:layout_constraintTop_toTopOf="@id/ivSettingBack" />
