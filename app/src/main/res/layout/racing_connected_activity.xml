@@ -27,6 +27,80 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clTrackConnect"
+        android:layout_width="@dimen/d1100dp"
+        android:layout_height="@dimen/d500dp"
+        android:background="@drawable/connect_track_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glTrackCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/tvTrackConnectStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/racing_device_has_connected"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s48sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/glTrackCenter"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/d50dp"
+            android:text="@string/racing_track"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s28sp"
+            app:layout_constraintBottom_toTopOf="@id/tvTrackConnectStatus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/glTrackCenter" />
+        <ImageView
+            android:id="@+id/ivConnectTrackLoading"
+            android:layout_width="@dimen/d56dp"
+            android:layout_height="@dimen/d56dp"
+            android:layout_marginTop="@dimen/d16dp"
+            android:src="@drawable/racing_connect_device_loading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/glTrackCenter"
+            app:layout_constraintTop_toBottomOf="@id/tvTrackConnectStatus" />
+        <TextView
+            android:id="@+id/tvFindTrack"
+            android:layout_width="@dimen/d95dp"
+            android:layout_height="@dimen/d35dp"
+            android:layout_marginTop="@dimen/d50dp"
+            android:background="@drawable/racing_find_device_btn_bg"
+            android:gravity="center"
+            android:text="@string/racing_find_device"
+            android:textColor="@color/black"
+            android:textSize="@dimen/s14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/glTrackCenter"
+            app:layout_constraintTop_toBottomOf="@id/tvTrackConnectStatus" />
+
+        <TextView
+            android:id="@+id/tvFindTrackHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d8dp"
+            android:text="@string/racing_find_device_hint"
+            android:textColor="#F4F5F9"
+            android:textSize="@dimen/s12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/glTrackCenter"
+            app:layout_constraintTop_toBottomOf="@id/tvFindTrack" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ivBlueHeadbandConnect"
@@ -34,6 +108,7 @@
         android:layout_height="@dimen/d500dp"
         android:layout_marginEnd="@dimen/d100dp"
         android:background="@drawable/connect_blue_headband_bg"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ivRedHeadbandConnect"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -117,6 +192,7 @@
         android:layout_width="@dimen/d500dp"
         android:layout_height="@dimen/d500dp"
         android:background="@drawable/connect_red_headband_bg"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivBlueHeadbandConnect"

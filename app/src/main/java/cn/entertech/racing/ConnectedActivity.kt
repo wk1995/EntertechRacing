@@ -18,6 +18,8 @@ class ConnectedActivity : BaseActivity() {
 
     private var ivBlueHeadbandConnect: View? = null
     private var ivRedHeadbandConnect: View? = null
+    private var clTrackConnect: View? = null
+
     private var tvBlueHeadbandConnectStatus: TextView? = null
     private var tvFindBlueHeadband: TextView? = null
     private var tvFindBlueHeadbandHint: TextView? = null
@@ -28,6 +30,11 @@ class ConnectedActivity : BaseActivity() {
     private var tvFindRedHeadbandHint: TextView? = null
     private var ivConnectRedHeadbandLoading: ImageView? = null
 
+    private var tvTrackConnectStatus: TextView? = null
+    private var tvFindTrackHint: TextView? = null
+    private var tvFindTrack: TextView? = null
+    private var ivConnectTrackLoading: ImageView? = null
+
     private var tvConnectDeviceHintContent1: TextView? = null
     private var tvConnectDeviceHintContent2: TextView? = null
     private lateinit var deviceTypeName: String
@@ -36,6 +43,7 @@ class ConnectedActivity : BaseActivity() {
     override fun initView() {
         super.initView()
         ivConnectBack = findViewById(R.id.ivConnectBack)
+        clTrackConnect = findViewById(R.id.clTrackConnect)
         ivConnectSettings = findViewById(R.id.ivConnectSettings)
         tvBlueHeadbandConnectStatus = findViewById(R.id.tvBlueHeadbandConnectStatus)
         tvFindBlueHeadband = findViewById(R.id.tvFindBlueHeadband)
@@ -47,6 +55,10 @@ class ConnectedActivity : BaseActivity() {
         ivConnectRedHeadbandLoading = findViewById(R.id.ivConnectRedHeadbandLoading)
         tvConnectDeviceHintContent1 = findViewById(R.id.tvConnectDeviceHintContent1)
         tvConnectDeviceHintContent2 = findViewById(R.id.tvConnectDeviceHintContent2)
+        tvTrackConnectStatus = findViewById(R.id.tvTrackConnectStatus)
+        tvFindTrackHint = findViewById(R.id.tvFindTrackHint)
+        tvFindTrack = findViewById(R.id.tvFindTrack)
+        ivConnectTrackLoading = findViewById(R.id.ivConnectTrackLoading)
     }
 
     override fun initData() {
@@ -62,9 +74,9 @@ class ConnectedActivity : BaseActivity() {
         }
 
         if (deviceTypeName == DeviceType.DEVICE_TYPE_TRACK.name) {
-
+            clTrackConnect?.visibility = View.VISIBLE
         } else {
-
+            clTrackConnect?.visibility = View.GONE
         }
     }
 

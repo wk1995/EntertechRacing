@@ -402,6 +402,7 @@
 	<dimen name="d399dp">399dp</dimen>
 	<dimen name="d400dp">400dp</dimen>
 	<dimen name="d500dp">500dp</dimen>
+	<dimen name="d1100dp">1100dp</dimen>
 
 	<dimen name="s8sp">8sp</dimen>
 	<dimen name="s10sp">10sp</dimen>
