@@ -53,6 +53,13 @@ class RacingCompetitionViewModel : ViewModel() {
     private val blueArrayData: ArrayDeque<Int> = ArrayDeque()
     private val redArrayData: ArrayDeque<Int> = ArrayDeque()
 
+    private val deviceAffectServiceSet by lazy {
+        HashSet<Device>()
+    }
+
+    private val _showLoading = MutableStateFlow(false)
+    val showLoading = _showLoading.asStateFlow()
+
     /**
      * 更新UI
      * */
@@ -133,7 +140,7 @@ class RacingCompetitionViewModel : ViewModel() {
     }
 
     private fun initAllAffectiveService() {
-        listOf(Device.Red, Device.Blue).forEach {
+        getHeadbandDevice().forEach {
             if (AffectiveManage.hasConnectAffectiveService(it)) {
                 if (!AffectiveManage.hasStartAffectiveService(it)) {
                     startAffectiveService(it)
@@ -146,6 +153,7 @@ class RacingCompetitionViewModel : ViewModel() {
                     }
 
                     override fun connectionSuccess(sessionId: String?) {
+                        deviceAffectServiceSet.add(it)
                         startAffectiveService(it)
                     }
                 })
@@ -190,14 +198,14 @@ class RacingCompetitionViewModel : ViewModel() {
             viewModelScope.launch {
                 _racingStatus.emit(RacingStatus.COMPETITIONING)
             }
-            initAllAffectiveService()
-            listOf(Device.Blue, Device.Red).forEach {
+//            initAllAffectiveService()
+            getHeadbandDevice().forEach {
                 BleManage.startBrainCollection(it)
             }
             //开始到计时
             // 设置定时器，参数依次为总时间（毫秒）、间隔时间（毫秒）
             competitionCountDownTimer =
-                object : CountDownTimer(SettingTimeEachRound.getValue().toLong(), 1000) {
+                object : CountDownTimer(SettingTimeEachRound.getValue().toLong() * 1000, 1000) {
                     override fun onTick(millisUntilFinished: Long) {
                         EntertechRacingLog.d(TAG, "$millisUntilFinished: ${Thread.currentThread()}")
                         viewModelScope.launch {
@@ -245,12 +253,17 @@ class RacingCompetitionViewModel : ViewModel() {
     }
 
 
+    private fun getHeadbandDevice() = listOf(Device.Blue, Device.Red)
+
     /**
      * 结束竞速
      * @param isAuto 是否是自动退出 true 自动退出
      * */
     fun finishCompetition(isAuto: Boolean) {
         if (_racingStatus.value == RacingStatus.COMPETITIONING) {
+            viewModelScope.launch {
+                _showLoading.emit(true)
+            }
             //停止定时器
             sendDataTime?.cancel()
             sendDataTime?.purge();
@@ -258,8 +271,9 @@ class RacingCompetitionViewModel : ViewModel() {
             //关闭倒计时
             competitionCountDownTimer?.cancel()
             competitionCountDownTimer = null
-            listOf(Device.Blue, Device.Red).forEach {
+            getHeadbandDevice().forEach {
                 BleManage.stopBrainCollection(it)
+                EntertechRacingLog.d(TAG, "$it unSubscribeData")
                 AffectiveManage.unSubscribeData(
                     it, listener = if (it == Device.Red) {
                         redAffectiveDataListener
@@ -280,26 +294,37 @@ class RacingCompetitionViewModel : ViewModel() {
                         }
 
                         override fun finishError(error: Error?) {
-                            AffectiveManage.closeAffectiveServiceConnection(it)
+                            closeAffectiveServiceConnection(it, isAuto)
                         }
 
                         override fun finishSuccess() {
-                            AffectiveManage.closeAffectiveServiceConnection(it)
+                            closeAffectiveServiceConnection(it, isAuto)
                         }
                     })
             }
-            if (isAuto) {
-                //求平均值
-                viewModelScope.launch {
+        }
+
+    }
+
+    fun closeAffectiveServiceConnection(device: Device, isAuto: Boolean) {
+        AffectiveManage.closeAffectiveServiceConnection(device)
+        viewModelScope.launch(Dispatchers.Main) {
+            EntertechRacingLog.d(
+                TAG,
+                "closeAffectiveServiceConnection ${deviceAffectServiceSet.size}"
+            )
+            deviceAffectServiceSet.remove(device)
+            if (deviceAffectServiceSet.isEmpty()) {
+                EntertechRacingLog.d(TAG, "emit $deviceAffectServiceSet")
+                _showLoading.emit(false)
+                if (isAuto) {
+                    //求平均值
                     _racingStatus.emit(RacingStatus.COMPETITION_END)
-                }
-            } else {
-                viewModelScope.launch {
+                } else {
                     _racingStatus.emit(RacingStatus.PRE_COMPETITION)
                 }
             }
         }
-
     }
 
     fun gotoHandBand(context: Context) {
@@ -354,8 +379,8 @@ class RacingCompetitionViewModel : ViewModel() {
 
     private fun hasTrackMac(): Boolean = SetItemTrackFactory.getValue().isNotEmpty()
 
-    fun blueIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Blue)
-    fun redIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Red)
+    fun blueIsConnected(): Boolean = true
+    fun redIsConnected(): Boolean = true
     fun trackIsConnected(): Boolean = true
 
     fun blueIsWear(): Boolean = true
@@ -385,7 +410,14 @@ class RacingCompetitionViewModel : ViewModel() {
         var listener = deviceRawDataListenerMap[device]
         if (listener == null) {
             listener = {
-                AffectiveManage.appendData(device, it)
+                if (AffectiveManage.hasConnectAffectiveService(device) && AffectiveManage.hasStartAffectiveService(
+                        device
+                    )
+                ) {
+                    EntertechRacingLog.d(TAG, "$device appendData")
+                    AffectiveManage.appendData(device, it)
+                }
+
             }
             deviceRawDataListenerMap[device] = listener
         }

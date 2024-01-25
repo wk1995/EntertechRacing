@@ -7,9 +7,11 @@ import cn.entertech.affective.sdk.api.IGetReportListener
 import cn.entertech.affective.sdk.api.IStartAffectiveServiceLister
 import cn.entertech.affective.sdk.bean.AffectiveServiceWay
 import cn.entertech.affective.sdk.bean.EnterAffectiveConfigProxy
+import cn.entertech.affective.sdk.bean.Error
 import cn.entertech.affective.sdk.bean.RealtimeAffectiveData
 import cn.entertech.affective.sdk.bean.RealtimeBioData
 import cn.entertech.racing.device.Device
+import cn.entertech.racing.log.EntertechRacingLog
 
 object AffectiveManage {
 
@@ -17,10 +19,14 @@ object AffectiveManage {
         HashMap<Device, IAffectiveDataAnalysisService?>()
     }
 
+    private const val TAG = "AffectiveManage"
 
-    private fun getAnalysisService(device: Device): IAffectiveDataAnalysisService? {
+    private fun getAnalysisService(
+        device: Device,
+        needCreate: Boolean = true
+    ): IAffectiveDataAnalysisService? {
         var service = analysisServiceMap[device]
-        if (service == null) {
+        if (service == null && needCreate) {
             service =
                 IAffectiveDataAnalysisService.getService(AffectiveServiceWay.AffectiveLocalService)
             analysisServiceMap[device] = service
@@ -51,7 +57,7 @@ object AffectiveManage {
         connectionListener: () -> Unit,
         disconnectListener: (String) -> Unit
     ) {
-        getAnalysisService(device)?.removeServiceConnectStatueListener(
+        getAnalysisService(device, false)?.removeServiceConnectStatueListener(
             connectionListener,
             disconnectListener
         )
@@ -84,20 +90,24 @@ object AffectiveManage {
         bdListener: ((RealtimeBioData?) -> Unit)? = null,
         listener: ((RealtimeAffectiveData?) -> Unit)?
     ) {
-        getAnalysisService(device)?.unSubscribeData(bdListener = bdListener, listener)
+        getAnalysisService(device, false)?.unSubscribeData(bdListener = bdListener, listener)
     }
 
 
     fun closeAffectiveServiceConnection(device: Device) {
-        getAnalysisService(device)?.closeAffectiveServiceConnection()
+        getAnalysisService(device, false)?.closeAffectiveServiceConnection()
+        analysisServiceMap[device] = null
+        EntertechRacingLog.d(TAG, "analysisServiceMap: $analysisServiceMap")
     }
 
     fun finishAffectiveService(device: Device, listener: IFinishAffectiveServiceListener) {
-        getAnalysisService(device)?.finishAffectiveService(listener)
+        getAnalysisService(device, false)?.finishAffectiveService(listener) ?: listener.finishError(
+            Error(-1, "AnalysisService is null")
+        )
     }
 
     fun getReport(device: Device, listener: IGetReportListener, needReport: Boolean) {
-        getAnalysisService(device)?.getReport(listener, needReport)
+        getAnalysisService(device, false)?.getReport(listener, needReport)
     }
 
     fun hasConnectAffectiveService(device: Device): Boolean {
