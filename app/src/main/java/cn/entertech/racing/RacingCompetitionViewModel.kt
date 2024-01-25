@@ -49,6 +49,7 @@ class RacingCompetitionViewModel : ViewModel() {
     private var competitionCountDownTimer: CountDownTimer? = null
 
     private var sendDataTime: Timer? = null
+    private var task: TimerTask? = null
 
     private val blueArrayData: ArrayDeque<Int> = ArrayDeque()
     private val redArrayData: ArrayDeque<Int> = ArrayDeque()
@@ -142,17 +143,28 @@ class RacingCompetitionViewModel : ViewModel() {
     private fun initAllAffectiveService() {
         getHeadbandDevice().forEach {
             if (AffectiveManage.hasConnectAffectiveService(it)) {
+                EntertechRacingLog.d(TAG, "$it hasConnectAffectiveService")
                 if (!AffectiveManage.hasStartAffectiveService(it)) {
                     startAffectiveService(it)
+                } else {
+                    EntertechRacingLog.d(TAG, "$it hasStartAffectiveService")
                 }
             } else {
                 AffectiveManage.connectAffectiveServiceConnection(it, object :
                     IConnectionServiceListener {
                     override fun connectionError(error: Error?) {
                         //定时重连
+                        EntertechRacingLog.e(
+                            TAG,
+                            "$it connectAffectiveServiceConnection error $error"
+                        )
                     }
 
                     override fun connectionSuccess(sessionId: String?) {
+                        EntertechRacingLog.i(
+                            TAG,
+                            "$it connectAffectiveServiceConnection  $sessionId"
+                        )
                         deviceAffectServiceSet.add(it)
                         startAffectiveService(it)
                     }
@@ -166,15 +178,28 @@ class RacingCompetitionViewModel : ViewModel() {
         AffectiveManage.startAffectiveService(device,
             object : IStartAffectiveServiceLister {
                 override fun startAffectionFail(error: Error?) {
+                    EntertechRacingLog.e(
+                        TAG,
+                        "$device startAffectionFail error $error"
+                    )
                 }
 
                 override fun startBioFail(error: Error?) {
+                    EntertechRacingLog.e(
+                        TAG,
+                        "$device startBioFail error $error"
+                    )
                 }
 
                 override fun startFail(error: Error?) {
+                    EntertechRacingLog.e(
+                        TAG,
+                        "$device startFail error $error"
+                    )
                 }
 
                 override fun startSuccess() {
+                    EntertechRacingLog.i(TAG, "$device startSuccess ")
                     AffectiveManage.subscribeData(
                         device, listener =
                         if (device == Device.Red) {
@@ -198,7 +223,7 @@ class RacingCompetitionViewModel : ViewModel() {
             viewModelScope.launch {
                 _racingStatus.emit(RacingStatus.COMPETITIONING)
             }
-//            initAllAffectiveService()
+            initAllAffectiveService()
             getHeadbandDevice().forEach {
                 BleManage.startBrainCollection(it)
             }
@@ -221,8 +246,8 @@ class RacingCompetitionViewModel : ViewModel() {
                 }
             competitionCountDownTimer?.start()
             //定义定时器，每1s发一次数据
-            sendDataTime = Timer()
-            val task: TimerTask = object : TimerTask() {
+            sendDataTime = Timer("sendAttentionData")
+            task = object : TimerTask() {
                 override fun run() {
                     // 在主线程中更新 UI
                     viewModelScope.launch(Dispatchers.Main) {
@@ -243,7 +268,10 @@ class RacingCompetitionViewModel : ViewModel() {
                     }
                 }
             }
-            sendDataTime?.schedule(task, 0, 1000);
+            task?.apply {
+                sendDataTime?.schedule(this, 0, 1000);
+            }
+
         }
 
     }
@@ -260,10 +288,13 @@ class RacingCompetitionViewModel : ViewModel() {
      * @param isAuto 是否是自动退出 true 自动退出
      * */
     fun finishCompetition(isAuto: Boolean) {
+        EntertechRacingLog.d(TAG, "finishCompetition")
         if (_racingStatus.value == RacingStatus.COMPETITIONING) {
             viewModelScope.launch {
                 _showLoading.emit(true)
             }
+            task?.cancel()
+            task = null
             //停止定时器
             sendDataTime?.cancel()
             sendDataTime?.purge();
@@ -286,18 +317,20 @@ class RacingCompetitionViewModel : ViewModel() {
                 AffectiveManage.finishAffectiveService(it,
                     object : IFinishAffectiveServiceListener {
                         override fun finishAffectiveFail(error: Error?) {
-
+                            EntertechRacingLog.e(TAG, "finishAffectiveFail $error")
                         }
 
                         override fun finishBioFail(error: Error?) {
-
+                            EntertechRacingLog.e(TAG, "finishBioFail $error")
                         }
 
                         override fun finishError(error: Error?) {
+                            EntertechRacingLog.e(TAG, "finishError $error")
                             closeAffectiveServiceConnection(it, isAuto)
                         }
 
                         override fun finishSuccess() {
+                            EntertechRacingLog.i(TAG, "finishSuccess ")
                             closeAffectiveServiceConnection(it, isAuto)
                         }
                     })
@@ -307,6 +340,10 @@ class RacingCompetitionViewModel : ViewModel() {
     }
 
     fun closeAffectiveServiceConnection(device: Device, isAuto: Boolean) {
+        EntertechRacingLog.d(
+            TAG,
+            "closeAffectiveServiceConnection $device ${Thread.currentThread()}"
+        )
         AffectiveManage.closeAffectiveServiceConnection(device)
         viewModelScope.launch(Dispatchers.Main) {
             EntertechRacingLog.d(
@@ -396,6 +433,7 @@ class RacingCompetitionViewModel : ViewModel() {
         var listener = deviceDisconnectListenerMap[device]
         if (listener == null) {
             listener = {
+                EntertechRacingLog.d(TAG, "$device Disconnect")
                 viewModelScope.launch {
                     _update.emit(Unit)
                 }
