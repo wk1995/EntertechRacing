@@ -18,6 +18,9 @@ import cn.entertech.racing.device.DeviceType
 import cn.entertech.racing.log.EntertechRacingLog
 import cn.entertech.racing.setting.SettingActivity
 import cn.entertech.racing.setting.SettingType
+import cn.entertech.racing.setting.item.SettingTimeEachRound
+import cn.entertech.racing.setting.item.TrackBlueThreshold
+import cn.entertech.racing.setting.item.TrackRedThreshold
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -190,22 +193,23 @@ class RacingCompetitionViewModel : ViewModel() {
             }
             //开始到计时
             // 设置定时器，参数依次为总时间（毫秒）、间隔时间（毫秒）
-            competitionCountDownTimer = object : CountDownTimer(10000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    EntertechRacingLog.d(TAG, "$millisUntilFinished: ${Thread.currentThread()}")
-                    viewModelScope.launch {
-                        _remainingTime.emit(remainTimeToString(millisUntilFinished))
+            competitionCountDownTimer =
+                object : CountDownTimer(SettingTimeEachRound.getValue().toLong(), 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        EntertechRacingLog.d(TAG, "$millisUntilFinished: ${Thread.currentThread()}")
+                        viewModelScope.launch {
+                            _remainingTime.emit(remainTimeToString(millisUntilFinished))
+                        }
+                    }
+
+                    override fun onFinish() {
+                        EntertechRacingLog.d(TAG, "onFinish: ${Thread.currentThread()}")
+                        // 定时器完成时调用
+                        finishCompetition(true)
                     }
                 }
-
-                override fun onFinish() {
-                    EntertechRacingLog.d(TAG, "onFinish: ${Thread.currentThread()}")
-                    // 定时器完成时调用
-                    finishCompetition(true)
-                }
-            }
             competitionCountDownTimer?.start()
-            //定义定时器，每0.6s发一次数据
+            //定义定时器，每1s发一次数据
             sendDataTime = Timer()
             val task: TimerTask = object : TimerTask() {
                 override fun run() {
@@ -215,13 +219,13 @@ class RacingCompetitionViewModel : ViewModel() {
                         byteArray[0] = if (redArrayData.isNotEmpty()) {
                             redArrayData.removeFirst().toByte()
                         } else {
-                            0
+                            TrackRedThreshold.getValue().toByte()
                         }
                         byteArray[1] = Integer.valueOf(50).toByte()
                         byteArray[2] = if (blueArrayData.isNotEmpty()) {
                             blueArrayData.removeFirst().toByte()
                         } else {
-                            0
+                            TrackBlueThreshold.getValue().toByte()
                         }
                         byteArray[3] = Integer.valueOf(50).toByte()
                         BleManage.sendData(Device.Track, byteArray)

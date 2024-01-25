@@ -5,7 +5,10 @@ import cn.entertech.ble.ConnectionBleStrategy
 import cn.entertech.ble.multiple.MultipleBiomoduleBleManager
 import cn.entertech.racing.RacingApplication
 import cn.entertech.racing.device.Device
+import cn.entertech.racing.headband.BlueHeadBandFactory
+import cn.entertech.racing.headband.RedHeadBandFactory
 import cn.entertech.racing.log.EntertechRacingLog
+import cn.entertech.racing.track.SetItemTrackFactory
 
 object BleManage {
 
@@ -30,6 +33,24 @@ object BleManage {
             failure,
             ConnectionBleStrategy.SCAN_AND_CONNECT_HIGH_SIGNAL
         )
+       /* val mac = when (device) {
+            Device.Track -> {
+                SetItemTrackFactory.getValue()
+            }
+
+            Device.Red -> {
+                RedHeadBandFactory.getValue()
+            }
+
+            Device.Blue -> {
+                BlueHeadBandFactory.getValue()
+            }
+        }
+        bleConnectManager.scanMacAndConnect(
+            mac = mac,
+            successConnect = successConnect,
+            failure = failure
+        )*/
     }
 
     fun disconnectDevice(
@@ -103,9 +124,9 @@ object BleManage {
         getBleConnectManager(device).stopBrainCollection(success, failure)
     }
 
-    fun sendData(device: Device,byteArray: ByteArray){
+    fun sendData(device: Device, byteArray: ByteArray) {
         getBleConnectManager(device).command(byteArray)
-        EntertechRacingLog.d("sendData","byteArray")
+        EntertechRacingLog.d("sendData", "byteArray")
     }
 
 }
