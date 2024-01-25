@@ -4,50 +4,27 @@ import cn.entertech.ble.BaseBleConnectManager
 import cn.entertech.ble.ConnectionBleStrategy
 import cn.entertech.ble.multiple.MultipleBiomoduleBleManager
 import cn.entertech.racing.RacingApplication
+import cn.entertech.racing.device.Device
+import java.util.EnumMap
 
 object BleManage {
 
-    private val blueDisconnectListener = ArrayList<(String) -> Unit>()
-    private val redDisconnectListener = ArrayList<(String) -> Unit>()
-    private val trackDisconnectListener = ArrayList<(String) -> Unit>()
-
-    private val blueBleConnectManager by lazy {
-        MultipleBiomoduleBleManager(RacingApplication.getInstance())
+    private val bleConnectManagerMap by lazy {
+        HashMap<Device, BaseBleConnectManager>()
     }
 
-    private val redBleConnectManager by lazy {
-        MultipleBiomoduleBleManager(RacingApplication.getInstance())
+    fun deviceIsConnect(device: Device) = getBleConnectManager(device).isConnected()
+
+
+    fun findDevice(device: Device) {
+        getBleConnectManager(device).findConnectedDevice()
     }
 
-    private val trackBleConnectManager by lazy {
-        MultipleBiomoduleBleManager(RacingApplication.getInstance())
-    }
-
-    fun blueIsConnect() = blueBleConnectManager.isConnected()
-
-    fun redIsConnect() = redBleConnectManager.isConnected()
-
-    fun trackIsConnect() = trackBleConnectManager.isConnected()
-
-
-    fun findBlueHeadband() {
-        blueBleConnectManager.findConnectedDevice()
-    }
-
-    fun findRedHeadband() {
-        redBleConnectManager.findConnectedDevice()
-    }
-
-    fun findTrack() {
-        trackBleConnectManager.findConnectedDevice()
-    }
-
-
-    fun connectBleDevice(
-        bleConnectManager: BaseBleConnectManager,
-        successConnect: ((String) -> Unit)?,
-        failure: ((String) -> Unit)?
+    fun connectDevice(
+        device: Device, successConnect: ((String) -> Unit)? = null,
+        failure: ((String) -> Unit)? = null
     ) {
+        val bleConnectManager = getBleConnectManager(device)
         bleConnectManager.connectDevice(
             successConnect,
             failure,
@@ -55,59 +32,75 @@ object BleManage {
         )
     }
 
-    fun connectBlueDevice(
-        successConnect: ((String) -> Unit)?,
-        failure: ((String) -> Unit)?
+    fun disconnectDevice(
+        device: Device,
+        success: () -> Unit = {},
+        failure: ((String) -> Unit)? = null
     ) {
-        connectBleDevice(blueBleConnectManager, successConnect, failure)
+        getBleConnectManager(device).disConnect(success, failure)
     }
 
-    fun connectRedDevice(
-        successConnect: ((String) -> Unit)?,
-        failure: ((String) -> Unit)?
-    ) {
-        connectBleDevice(redBleConnectManager, successConnect, failure)
+
+    fun removeDisconnectListener(device: Device, listener: (String) -> Unit) {
+        val bleConnectManager = getBleConnectManager(device)
+        bleConnectManager.removeConnectListener(listener)
     }
 
-    fun connectTrackDevice(
-        successConnect: ((String) -> Unit)?,
-        failure: ((String) -> Unit)?
-    ) {
-        connectBleDevice(trackBleConnectManager, successConnect, failure)
+    fun addDisconnectListener(device: Device, listener: (String) -> Unit) {
+        val bleConnectManager = getBleConnectManager(device)
+        bleConnectManager.addDisConnectListener(listener)
+    }
+
+    private fun getBleConnectManager(device: Device): BaseBleConnectManager {
+        var bleConnectManager = bleConnectManagerMap[device]
+        if (bleConnectManager == null) {
+            bleConnectManager = MultipleBiomoduleBleManager(RacingApplication.getInstance())
+            bleConnectManagerMap[device] = bleConnectManager
+        }
+        return bleConnectManager
     }
 
     fun addBlueDisconnectListener(listener: (String) -> Unit) {
-        blueDisconnectListener.add(listener)
-        if (blueDisconnectListener.size == 1) {
-            blueBleConnectManager.addDisConnectListener { tips ->
-                blueDisconnectListener.forEach {
-                    it(tips)
-                }
-            }
-        }
+        addDisconnectListener(Device.Blue, listener)
     }
 
     fun addRedDisconnectListener(listener: (String) -> Unit) {
-        redDisconnectListener.add(listener)
-        if (redDisconnectListener.size == 1) {
-            redBleConnectManager.addDisConnectListener { tips ->
-                redDisconnectListener.forEach {
-                    it(tips)
-                }
-            }
-        }
+        addDisconnectListener(Device.Red, listener)
     }
 
     fun addTrackDisconnectListener(listener: (String) -> Unit) {
-        trackDisconnectListener.add(listener)
-        if (trackDisconnectListener.size == 1) {
-            trackBleConnectManager.addDisConnectListener { tips ->
-                trackDisconnectListener.forEach {
-                    it(tips)
-                }
-            }
-        }
+        addDisconnectListener(Device.Track, listener)
     }
 
+
+    fun addDeviceRawDataListener(device: Device, listener: (ByteArray) -> Unit) {
+        getBleConnectManager(device).addRawDataListener(listener)
+    }
+
+    fun removeDeviceRawDataListener(device: Device, listener: (ByteArray) -> Unit) {
+        getBleConnectManager(device).removeRawDataListener(listener)
+    }
+
+    fun addContactListener(device: Device, listener: (Int) -> Unit) {
+        getBleConnectManager(device).addContactListener(listener)
+    }
+
+    fun removeContactListener(device: Device, listener: (Int) -> Unit) {
+        getBleConnectManager(device).removeContactListener(listener)
+    }
+
+    fun startBrainCollection(
+        device: Device, success: ((ByteArray) -> Unit)? = null,
+        failure: ((String) -> Unit)? = null
+    ) {
+        getBleConnectManager(device).startBrainCollection(success, failure)
+    }
+
+    fun stopBrainCollection(
+        device: Device, success: ((ByteArray) -> Unit)? = null,
+        failure: ((String) -> Unit)? = null
+    ) {
+        getBleConnectManager(device).stopBrainCollection(success, failure)
+    }
 
 }

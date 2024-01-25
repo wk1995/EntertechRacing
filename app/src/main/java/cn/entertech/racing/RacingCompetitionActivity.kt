@@ -6,8 +6,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import cn.entertech.racing.base.BaseActivity
 import com.caverock.androidsvg.SVG
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 /**
@@ -57,13 +60,47 @@ class RacingCompetitionActivity : BaseActivity() {
         val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
         val pictureDrawable = PictureDrawable(svg.renderToPicture())
         ivCompetitionStatus?.setImageDrawable(pictureDrawable)
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.updateUi.collect {
+                updateUI()
+            }
+        }
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.blueAttention.collect {
+                if (it == 0) {
+                    tvBlueAttentionValue?.text = "--"
+                } else {
+                    tvBlueAttentionValue?.text = it.toString()
+                }
+            }
+        }
 
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.redAttention.collect {
+                if (it == 0) {
+                    tvBlueAttentionValue?.text = "--"
+                } else {
+                    tvBlueAttentionValue?.text = it.toString()
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         updateUI()
+        viewModel.listenerAllDeviceDisconnect()
+        viewModel.listenerHeadbandRawData()
+        viewModel.listenerHeadbandContactStatus()
     }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.removeAllDeviceDisconnectListener()
+        viewModel.removeHeadbandRawDataListener()
+        viewModel.removeHeadbandContactStatus()
+    }
+
 
     /**
      * 更新UI状态

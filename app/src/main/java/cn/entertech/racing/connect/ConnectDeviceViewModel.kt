@@ -6,6 +6,7 @@ import cn.entertech.ble.ConnectionBleStrategy
 import cn.entertech.ble.multiple.MultipleBiomoduleBleManager
 import cn.entertech.racing.RacingApplication
 import cn.entertech.racing.ble.BleManage
+import cn.entertech.racing.device.Device
 import cn.entertech.racing.log.EntertechRacingLog
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -27,15 +28,15 @@ class ConnectDeviceViewModel : ViewModel() {
     val connectTrackResult = _connectTrackResult.asSharedFlow()
 
 
-    fun blueIsConnect() = BleManage.blueIsConnect()
+    fun blueIsConnect() = BleManage.deviceIsConnect(Device.Blue)
 
-    fun redIsConnect() = BleManage.redIsConnect()
+    fun redIsConnect() = BleManage.deviceIsConnect(Device.Red)
 
-    fun trackIsConnect() = BleManage.trackIsConnect()
+    fun trackIsConnect() = BleManage.deviceIsConnect(Device.Track)
 
     fun connectBlueDevice() {
         EntertechRacingLog.d(TAG, "connectBlueDevice")
-        BleManage.connectBlueDevice({
+        BleManage.connectDevice(Device.Blue, {
             EntertechRacingLog.d(TAG, "connect Blue success $it")
             viewModelScope.launch {
                 _connectBlueResult.emit(Unit)
@@ -50,7 +51,7 @@ class ConnectDeviceViewModel : ViewModel() {
 
     fun connectRedDevice() {
         EntertechRacingLog.d(TAG, "connectRedDevice")
-        BleManage.connectRedDevice({
+        BleManage.connectDevice(Device.Red, {
             EntertechRacingLog.d(TAG, "connect Red success $it")
             viewModelScope.launch {
                 _connectRedResult.emit(Unit)
@@ -65,7 +66,7 @@ class ConnectDeviceViewModel : ViewModel() {
 
     fun connectTrackDevice() {
         EntertechRacingLog.d(TAG, "connectTrackDevice")
-        BleManage.connectTrackDevice({
+        BleManage.connectDevice(Device.Track, {
             EntertechRacingLog.i(TAG, "connect Track success $it")
             viewModelScope.launch {
                 _connectTrackResult.emit(Unit)
@@ -79,15 +80,15 @@ class ConnectDeviceViewModel : ViewModel() {
     }
 
     fun findBlueHeadband() {
-        BleManage.findBlueHeadband()
+        BleManage.findDevice(Device.Blue)
     }
 
     fun findRedHeadband() {
-        BleManage.findRedHeadband()
+        BleManage.findDevice(Device.Red)
     }
 
     fun findTrack() {
-        BleManage.findTrack()
+        BleManage.findDevice(Device.Track)
     }
 
 }
