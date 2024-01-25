@@ -87,4 +87,6 @@ open class BaseDialogFragment() : DialogFragment(), OnClickListener {
     open fun selectCancel() {
 
     }
+
+    fun isShowing() = dialog?.isShowing == true
 }
