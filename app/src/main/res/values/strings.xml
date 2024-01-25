@@ -28,6 +28,7 @@
     <string name="racing_device_has_connected">已连接</string>
     <string name="racing_device_connecting">连接中…</string>
     <string name="racing_connected_hint">连接提示</string>
+    <string name="racing_back_first_page">返回首页</string>
     <string name="racing_connect_headband_hint_content1">1.长按设备按键至蓝灯闪烁。\n
 2.如果长按开关，指示灯没有亮起，请先充电 10 分钟后再试一次。</string>
     <string name="racing_connect_headband_hint_content2">3.如蓝牙已开启，请关闭并重新打开。\n

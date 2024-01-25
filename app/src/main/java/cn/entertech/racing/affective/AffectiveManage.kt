@@ -66,7 +66,7 @@ object AffectiveManage {
     fun subscribeData(
         device: Device,
         bdListener: ((RealtimeBioData?) -> Unit)? = null,
-        listener: ((RealtimeAffectiveData?) -> Unit)
+        listener: ((RealtimeAffectiveData?) -> Unit)? = null
     ) {
         getAnalysisService(device)?.subscribeData(bdListener = bdListener, listener)
     }
@@ -82,7 +82,7 @@ object AffectiveManage {
     fun unSubscribeData(
         device: Device,
         bdListener: ((RealtimeBioData?) -> Unit)? = null,
-        listener: ((RealtimeAffectiveData?) -> Unit)
+        listener: ((RealtimeAffectiveData?) -> Unit)?
     ) {
         getAnalysisService(device)?.unSubscribeData(bdListener = bdListener, listener)
     }

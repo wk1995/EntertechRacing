@@ -5,7 +5,7 @@ import cn.entertech.ble.ConnectionBleStrategy
 import cn.entertech.ble.multiple.MultipleBiomoduleBleManager
 import cn.entertech.racing.RacingApplication
 import cn.entertech.racing.device.Device
-import java.util.EnumMap
+import cn.entertech.racing.log.EntertechRacingLog
 
 object BleManage {
 
@@ -101,6 +101,11 @@ object BleManage {
         failure: ((String) -> Unit)? = null
     ) {
         getBleConnectManager(device).stopBrainCollection(success, failure)
+    }
+
+    fun sendData(device: Device,byteArray: ByteArray){
+        getBleConnectManager(device).command(byteArray)
+        EntertechRacingLog.d("sendData","byteArray")
     }
 
 }

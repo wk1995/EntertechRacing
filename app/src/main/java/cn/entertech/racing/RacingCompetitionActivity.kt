@@ -1,9 +1,11 @@
 package cn.entertech.racing
 
+import android.content.Intent
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +30,8 @@ class RacingCompetitionActivity : BaseActivity() {
     private var tvBlueAttentionValue: TextView? = null
     private var tvRedAttentionValue: TextView? = null
     private var tvStartCompetition: TextView? = null
+    private var tvRemainingTime: TextView? = null
+    private var pbCompetitionProgress: ProgressBar? = null
     private var tvRacingErrorBlueConnected: TextView? = null
     private var tvRacingErrorTrackConnected: TextView? = null
     private var tvRacingErrorRedConnected: TextView? = null
@@ -47,6 +51,8 @@ class RacingCompetitionActivity : BaseActivity() {
         tvBlueAttentionValue = findViewById(R.id.tvBlueAttentionValue)
         tvRedAttentionValue = findViewById(R.id.tvRedAttentionValue)
         tvStartCompetition = findViewById(R.id.tvStartCompetition)
+        tvRemainingTime = findViewById(R.id.tvRemainingTime)
+        pbCompetitionProgress = findViewById(R.id.pbCompetitionProgress)
         tvRacingErrorBlueConnected = findViewById(R.id.tvRacingErrorBlueConnected)
         tvRacingErrorTrackConnected = findViewById(R.id.tvRacingErrorTrackConnected)
         tvRacingErrorRedConnected = findViewById(R.id.tvRacingErrorRedConnected)
@@ -61,26 +67,77 @@ class RacingCompetitionActivity : BaseActivity() {
         val pictureDrawable = PictureDrawable(svg.renderToPicture())
         ivCompetitionStatus?.setImageDrawable(pictureDrawable)
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.updateUi.collect {
-                updateUI()
-            }
-        }
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.blueAttention.collect {
-                if (it == 0) {
-                    tvBlueAttentionValue?.text = "--"
-                } else {
-                    tvBlueAttentionValue?.text = it.toString()
+            launch {
+                viewModel.racingStatus.collect {
+                    when (it) {
+                        RacingStatus.COMPETITIONING -> {
+                            pbCompetitionProgress?.visibility = View.VISIBLE
+                            tvCompetitionFinish?.visibility = View.VISIBLE
+                            tvStartCompetition?.visibility = View.GONE
+                            tvCompetitionTrack?.visibility = View.GONE
+                            tvCompetitionHandBand?.visibility = View.GONE
+                            ivCompetitionSetting?.visibility = View.GONE
+
+                        }
+
+                        RacingStatus.PRE_COMPETITION -> {
+                            pbCompetitionProgress?.visibility = View.GONE
+
+                            tvStartCompetition?.visibility =
+                                if (
+                                    ((viewModel.blueIsConnected() && viewModel.blueIsWear())
+                                            || (viewModel.redIsConnected() && viewModel.redIsWear())) && viewModel.trackIsConnected()
+                                ) {
+                                    View.VISIBLE
+                                } else {
+                                    View.GONE
+                                }
+
+                            tvCompetitionFinish?.visibility = View.GONE
+                            tvCompetitionTrack?.visibility = View.VISIBLE
+                            tvCompetitionHandBand?.visibility = View.VISIBLE
+                            ivCompetitionSetting?.visibility = View.VISIBLE
+                        }
+
+                        RacingStatus.COMPETITION_END -> {
+                            viewModel.resetCompetition()
+                            startActivity(
+                                Intent(
+                                    this@RacingCompetitionActivity,
+                                    SettlementActivity::class.java
+                                )
+                            )
+                        }
+                    }
                 }
             }
-        }
+            launch {
+                viewModel.updateUi.collect {
+                    updateUI()
+                }
+            }
+            launch {
+                viewModel.blueAttention.collect {
+                    if (it == 0) {
+                        tvBlueAttentionValue?.text = "--"
+                    } else {
+                        tvBlueAttentionValue?.text = it.toString()
+                    }
+                }
+            }
+            launch {
+                viewModel.redAttention.collect {
+                    if (it == 0) {
+                        tvBlueAttentionValue?.text = "--"
+                    } else {
+                        tvBlueAttentionValue?.text = it.toString()
+                    }
+                }
+            }
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.redAttention.collect {
-                if (it == 0) {
-                    tvBlueAttentionValue?.text = "--"
-                } else {
-                    tvBlueAttentionValue?.text = it.toString()
+            launch {
+                viewModel.remainingTime.collect {
+                    tvRemainingTime?.text = it
                 }
             }
         }
@@ -150,7 +207,7 @@ class RacingCompetitionActivity : BaseActivity() {
             }
 
             R.id.tvCompetitionFinish -> {
-                viewModel.finishCompetition()
+                viewModel.finishCompetition(false)
             }
 
             R.id.tvCompetitionHandBand -> {
