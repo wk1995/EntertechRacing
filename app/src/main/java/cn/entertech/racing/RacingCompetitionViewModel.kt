@@ -15,12 +15,15 @@ import cn.entertech.racing.ble.BleManage
 import cn.entertech.racing.connect.ConnectedActivity
 import cn.entertech.racing.device.Device
 import cn.entertech.racing.device.DeviceType
+import cn.entertech.racing.headband.BlueHeadBandFactory
+import cn.entertech.racing.headband.RedHeadBandFactory
 import cn.entertech.racing.log.EntertechRacingLog
 import cn.entertech.racing.setting.SettingActivity
 import cn.entertech.racing.setting.SettingType
 import cn.entertech.racing.setting.item.SettingTimeEachRound
 import cn.entertech.racing.setting.item.TrackBlueThreshold
 import cn.entertech.racing.setting.item.TrackRedThreshold
+import cn.entertech.racing.track.SetItemTrackFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -346,8 +349,10 @@ class RacingCompetitionViewModel : ViewModel() {
     /**
      * 有至少一个头环的mac地址
      * */
-    fun hasHeadbandMac(): Boolean = true
-    fun hasTrackMac(): Boolean = true
+    private fun hasHeadbandMac(): Boolean =
+        BlueHeadBandFactory.getValue().isNotEmpty() || RedHeadBandFactory.getValue().isNotEmpty()
+
+    private fun hasTrackMac(): Boolean = SetItemTrackFactory.getValue().isNotEmpty()
 
     fun blueIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Blue)
     fun redIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Red)
