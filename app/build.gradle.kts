@@ -47,7 +47,6 @@ dependencies {
     implementation("com.caverock:androidsvg:1.4")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
-    implementation("cn.entertech.android:affective-offline-sdk-flowtime:1.1.9")
-
-
+    implementation("cn.entertech.android:affective-offline-sdk-flowtime:1.2.0-debug")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
 }
