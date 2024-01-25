@@ -122,8 +122,8 @@
 
     <TextView
         android:id="@+id/tvStartCompetition"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/d160dp"
+        android:layout_height="@dimen/d40dp"
         android:layout_marginTop="@dimen/d4dp"
         android:background="@drawable/racing_start_competition_bg"
         android:gravity="center"
