@@ -4,18 +4,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/racing_rate"
     tools:context=".SettlementActivity">
+
     <TextView
         android:id="@+id/tvBack"
         android:layout_width="@dimen/d160dp"
         android:layout_height="@dimen/d40dp"
-        android:text="@string/racing_back_first_page"
-        android:textSize="@dimen/s16sp"
-        android:textColor="@color/white"
-        android:gravity="center"
         android:layout_marginStart="@dimen/d293dp"
+        android:layout_marginTop="@dimen/d28dp"
         android:layout_marginBottom="@dimen/d169dp"
         android:background="@drawable/racing_btn_bg_black"
+        android:gravity="center"
+        android:text="@string/racing_back_first_page"
+        android:textColor="@color/white"
+        android:textSize="@dimen/s16sp"
+        app:layout_constraintEnd_toEndOf="@id/includeSettlementOne"
+        app:layout_constraintTop_toBottomOf="@id/includeSettlementTwo" />
+
+    <include
+        android:id="@+id/includeSettlementOne"
+        layout="@layout/racing_settlement_item"
+        android:layout_width="@dimen/d335dp"
+        android:layout_height="@dimen/d51dp"
+        android:layout_marginStart="@dimen/d118dp"
+        android:layout_marginTop="@dimen/d194dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/includeSettlementTwo"
+        layout="@layout/racing_settlement_item"
+        android:layout_width="@dimen/d335dp"
+        android:layout_height="@dimen/d51dp"
+        android:layout_marginTop="@dimen/d8dp"
+        app:layout_constraintStart_toStartOf="@id/includeSettlementOne"
+        app:layout_constraintTop_toBottomOf="@id/includeSettlementOne" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/d61dp"
+        android:layout_marginBottom="@dimen/d8dp"
+        android:gravity="top"
+        app:layout_constraintBottom_toTopOf="@id/includeSettlementOne"
+        app:layout_constraintStart_toStartOf="@id/includeSettlementOne">
+
+        <TextView
+            android:id="@+id/tvSettlementOrder"
+            android:layout_width="@dimen/d30dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/d8dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s50sp"
+            android:textStyle="italic"
+            tools:text="2" />
+
+        <TextView
+            android:layout_width="@dimen/d23dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/d8dp"
+            android:gravity="center_horizontal|top"
+            android:text="/"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s30sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toEndOf="@id/tvSettlementOrder"
+            app:layout_constraintTop_toTopOf="@id/tvSettlementOrder" />
+
+        <TextView
+            android:layout_width="@dimen/d23dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/d8dp"
+            android:gravity="center_horizontal|top"
+            android:text="2"
+            android:textColor="@color/white"
+            android:textSize="@dimen/s20sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toEndOf="@id/tvSettlementOrder"
+            app:layout_constraintTop_toTopOf="@id/tvSettlementOrder" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="@dimen/d72dp"
+        android:layout_height="@dimen/d25dp"
+        android:layout_marginEnd="@dimen/d28dp"
+        android:layout_marginBottom="@dimen/d28dp"
+        android:src="@drawable/racing_enter_tech"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

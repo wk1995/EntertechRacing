@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/d335dp"
+    android:layout_height="@dimen/d51dp"
+    android:background="@drawable/racing_settlement_item_bg">
+
+    <ImageView
+        android:layout_width="@dimen/d83dp"
+        android:layout_height="@dimen/d27dp"
+        android:layout_marginStart="@dimen/d8dp"
+        android:layout_marginTop="@dimen/d8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/settlement_item_blue_text" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/d8dp"
+        android:layout_marginEnd="@dimen/d8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAvgAttentionValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d4dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/s16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="86" />
+
+    <ImageView
+        android:layout_width="@dimen/d60dp"
+        android:layout_height="@dimen/d30dp"
+        android:layout_marginTop="@dimen/d6dp"
+        android:layout_marginEnd="@dimen/d8dp"
+        android:src="@drawable/racing_settlement_number_one"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d4dp"
+        android:text="@string/racing_attention_avg"
+        android:textColor="@color/white"
+        android:textSize="@dimen/s8sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAvgAttentionValue" />
+</androidx.constraintlayout.widget.ConstraintLayout>

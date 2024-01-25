@@ -420,6 +420,7 @@
 	<dimen name="s30sp">30sp</dimen>
 	<dimen name="s32sp">32sp</dimen>
 	<dimen name="s48sp">48sp</dimen>
+	<dimen name="s50sp">50sp</dimen>
 	<dimen name="s64sp">64sp</dimen>
 
 </resources>
