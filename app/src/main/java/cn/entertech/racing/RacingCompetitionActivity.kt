@@ -73,6 +73,7 @@ class RacingCompetitionActivity : BaseActivity() {
                         RacingStatus.COMPETITIONING -> {
                             pbCompetitionProgress?.visibility = View.VISIBLE
                             tvCompetitionFinish?.visibility = View.VISIBLE
+                            tvRemainingTime?.visibility = View.VISIBLE
                             tvStartCompetition?.visibility = View.GONE
                             tvCompetitionTrack?.visibility = View.GONE
                             tvCompetitionHandBand?.visibility = View.GONE
@@ -82,7 +83,7 @@ class RacingCompetitionActivity : BaseActivity() {
 
                         RacingStatus.PRE_COMPETITION -> {
                             pbCompetitionProgress?.visibility = View.GONE
-
+                            tvRemainingTime?.visibility = View.GONE
                             tvStartCompetition?.visibility =
                                 if (
                                     ((viewModel.blueIsConnected() && viewModel.blueIsWear())
@@ -137,7 +138,7 @@ class RacingCompetitionActivity : BaseActivity() {
 
             launch {
                 viewModel.remainingTime.collect {
-                    tvRemainingTime?.text = it
+                    tvRemainingTime?.text = "剩余时间 $it"
                 }
             }
         }
