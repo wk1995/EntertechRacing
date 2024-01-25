@@ -3,6 +3,7 @@ package cn.entertech.racing
 import android.content.Context
 import android.content.Intent
 import android.os.CountDownTimer
+import android.os.Looper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.entertech.affective.sdk.api.IConnectionServiceListener
@@ -90,6 +91,14 @@ class RacingCompetitionViewModel : ViewModel() {
      * */
     private val _racingStatus = MutableStateFlow(RacingStatus.PRE_COMPETITION)
     val racingStatus = _racingStatus.asStateFlow()
+
+    private val _blueIsWear = MutableStateFlow(false)
+    val blueIsWear = _blueIsWear.asStateFlow()
+
+
+    private val _redIsWear = MutableStateFlow(false)
+    val redIsWear = _redIsWear.asStateFlow()
+
 
     private val sdf by lazy {
         SimpleDateFormat("mm:ss")
@@ -420,8 +429,6 @@ class RacingCompetitionViewModel : ViewModel() {
     fun redIsConnected(): Boolean = true
     fun trackIsConnected(): Boolean = true
 
-    fun blueIsWear(): Boolean = true
-    fun redIsWear(): Boolean = true
 
     fun listenerAllDeviceDisconnect() {
         listOf(Device.Red, Device.Track, Device.Blue).forEach {
@@ -466,7 +473,15 @@ class RacingCompetitionViewModel : ViewModel() {
         var listener = deviceContactListenerMap[device]
         if (listener == null) {
             listener = {
+                EntertechRacingLog.d(
+                    TAG,
+                    "$device ContactListener isMainThread ${Thread.currentThread() == Looper.getMainLooper().thread}"
+                )
+                if (it == 0) {
+                    //佩戴好了
+                } else {
 
+                }
             }
             deviceContactListenerMap[device] = listener
         }

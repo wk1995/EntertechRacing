@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import cn.entertech.racing.base.BaseActivity
+import cn.entertech.racing.log.EntertechRacingLog
 import com.caverock.androidsvg.SVG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +20,11 @@ import kotlinx.coroutines.launch
  * 比赛页面
  * */
 class RacingCompetitionActivity : BaseActivity() {
+
+    companion object {
+        private const val TAG = "RacingCompetitionActivity"
+    }
+
     private val viewModel: RacingCompetitionViewModel by lazy {
         ViewModelProvider(this)[RacingCompetitionViewModel::class.java]
     }
@@ -35,7 +41,7 @@ class RacingCompetitionActivity : BaseActivity() {
     private var tvRacingErrorBlueConnected: TextView? = null
     private var tvRacingErrorTrackConnected: TextView? = null
     private var tvRacingErrorRedConnected: TextView? = null
-
+    private var mLoadingDialog: LoadingDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.racing_competition_activity)
@@ -67,8 +73,27 @@ class RacingCompetitionActivity : BaseActivity() {
         val pictureDrawable = PictureDrawable(svg.renderToPicture())
         ivCompetitionStatus?.setImageDrawable(pictureDrawable)
         lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.showLoading.collect {
+                EntertechRacingLog.d(TAG, "showLoading $it mLoadingDialog $mLoadingDialog")
+                /*  if (it) {
+                      if (mLoadingDialog == null) {
+                          mLoadingDialog = LoadingDialog()
+                      }
+                      if (mLoadingDialog?.isShowing() != true) {
+                          mLoadingDialog?.show(supportFragmentManager, "")
+                      }
+                  } else {
+                      mLoadingDialog?.dismiss()
+                  }*/
+            }
+        }
+
+
+
+        lifecycleScope.launch(Dispatchers.Main) {
             launch {
                 viewModel.racingStatus.collect {
+                    EntertechRacingLog.d(TAG, "racingStatus: $it ")
                     when (it) {
                         RacingStatus.COMPETITIONING -> {
                             pbCompetitionProgress?.visibility = View.VISIBLE
@@ -86,8 +111,8 @@ class RacingCompetitionActivity : BaseActivity() {
                             tvRemainingTime?.visibility = View.GONE
                             tvStartCompetition?.visibility =
                                 if (
-                                    ((viewModel.blueIsConnected() && viewModel.blueIsWear())
-                                            || (viewModel.redIsConnected() && viewModel.redIsWear())) && viewModel.trackIsConnected()
+                                    ((viewModel.blueIsConnected() && viewModel.blueIsWear.value)
+                                            || (viewModel.redIsConnected() && viewModel.redIsWear.value)) && viewModel.trackIsConnected()
                                 ) {
                                     View.VISIBLE
                                 } else {
@@ -114,11 +139,13 @@ class RacingCompetitionActivity : BaseActivity() {
             }
             launch {
                 viewModel.updateUi.collect {
+                    EntertechRacingLog.d(TAG, "updateUi: $it ")
                     updateUI()
                 }
             }
             launch {
                 viewModel.blueAttention.collect {
+                    EntertechRacingLog.d(TAG, "blueAttention: $it ")
                     if (it == 0) {
                         tvBlueAttentionValue?.text = "--"
                     } else {
@@ -128,6 +155,7 @@ class RacingCompetitionActivity : BaseActivity() {
             }
             launch {
                 viewModel.redAttention.collect {
+                    EntertechRacingLog.d(TAG, "redAttention: $it ")
                     if (it == 0) {
                         tvBlueAttentionValue?.text = "--"
                     } else {
@@ -138,7 +166,34 @@ class RacingCompetitionActivity : BaseActivity() {
 
             launch {
                 viewModel.remainingTime.collect {
+                    EntertechRacingLog.d(TAG, "remainingTime: $it ")
                     tvRemainingTime?.text = "剩余时间 $it"
+                }
+            }
+
+            launch {
+                viewModel.blueIsWear.collect {
+                    if (viewModel.blueIsConnected()) {
+                        if (it) {
+                            tvRacingErrorBlueConnected?.visibility = View.GONE
+                        } else {
+                            tvRacingErrorBlueConnected?.visibility = View.VISIBLE
+                            tvRacingErrorBlueConnected?.setText(R.string.racing_error_headband_wear)
+                        }
+                    }
+                }
+            }
+
+            launch {
+                viewModel.redIsWear.collect {
+                    if (viewModel.redIsConnected()) {
+                        if (it) {
+                            tvRacingErrorBlueConnected?.visibility = View.GONE
+                        } else {
+                            tvRacingErrorBlueConnected?.visibility = View.VISIBLE
+                            tvRacingErrorBlueConnected?.setText(R.string.racing_error_headband_wear)
+                        }
+                    }
                 }
             }
         }
@@ -146,6 +201,7 @@ class RacingCompetitionActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        EntertechRacingLog.d(TAG, "onResume $this")
         updateUI()
         viewModel.listenerAllDeviceDisconnect()
         viewModel.listenerHeadbandRawData()
@@ -166,7 +222,7 @@ class RacingCompetitionActivity : BaseActivity() {
     private fun updateUI() {
         //判断蓝牙连接状态
         if (viewModel.blueIsConnected()) {
-            if (viewModel.blueIsWear()) {
+            if (viewModel.blueIsWear.value) {
                 tvRacingErrorBlueConnected?.visibility = View.GONE
             } else {
                 tvRacingErrorBlueConnected?.visibility = View.VISIBLE
@@ -175,7 +231,7 @@ class RacingCompetitionActivity : BaseActivity() {
         }
 
         if (viewModel.redIsConnected()) {
-            if (viewModel.redIsWear()) {
+            if (viewModel.redIsWear.value) {
                 tvRacingErrorRedConnected?.visibility = View.GONE
             } else {
                 tvRacingErrorRedConnected?.visibility = View.VISIBLE
@@ -191,8 +247,8 @@ class RacingCompetitionActivity : BaseActivity() {
 
         tvStartCompetition?.visibility =
             if (
-                ((viewModel.blueIsConnected() && viewModel.blueIsWear())
-                        || (viewModel.redIsConnected() && viewModel.redIsWear())) && viewModel.trackIsConnected()
+                ((viewModel.blueIsConnected() && viewModel.blueIsWear.value)
+                        || (viewModel.redIsConnected() && viewModel.redIsWear.value)) && viewModel.trackIsConnected()
             ) {
                 View.VISIBLE
             } else {
