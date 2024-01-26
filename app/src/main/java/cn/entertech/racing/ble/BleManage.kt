@@ -114,14 +114,14 @@ object BleManage {
         device: Device, success: ((ByteArray) -> Unit)? = null,
         failure: ((String) -> Unit)? = null
     ) {
-        getBleConnectManager(device).startBrainCollection(success, failure)
+        getBleConnectManager(device).startHeartAndBrainCollection(success, failure)
     }
 
     fun stopBrainCollection(
         device: Device, success: ((ByteArray) -> Unit)? = null,
         failure: ((String) -> Unit)? = null
     ) {
-        getBleConnectManager(device).stopBrainCollection(success, failure)
+        getBleConnectManager(device).stopHeartAndBrainCollection(success, failure)
     }
 
     fun sendData(device: Device, byteArray: ByteArray) {
