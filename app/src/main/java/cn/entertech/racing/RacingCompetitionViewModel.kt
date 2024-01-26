@@ -44,6 +44,8 @@ class RacingCompetitionViewModel : ViewModel() {
         private const val TAG = "RacingCompetitionViewModel"
     }
 
+    private var number = 0
+
     /**
      * 比赛倒计时
      * */
@@ -92,11 +94,11 @@ class RacingCompetitionViewModel : ViewModel() {
     private val _racingStatus = MutableStateFlow(RacingStatus.PRE_COMPETITION)
     val racingStatus = _racingStatus.asStateFlow()
 
-    private val _blueIsWear = MutableStateFlow(false)
+    private val _blueIsWear = MutableStateFlow(true)
     val blueIsWear = _blueIsWear.asStateFlow()
 
 
-    private val _redIsWear = MutableStateFlow(false)
+    private val _redIsWear = MutableStateFlow(true)
     val redIsWear = _redIsWear.asStateFlow()
 
 
@@ -255,7 +257,8 @@ class RacingCompetitionViewModel : ViewModel() {
                 }
             competitionCountDownTimer?.start()
             //定义定时器，每1s发一次数据
-            sendDataTime = Timer("sendAttentionData")
+            sendDataTime = Timer("sendAttentionData" + number)
+            number++
             task = object : TimerTask() {
                 override fun run() {
                     // 在主线程中更新 UI
