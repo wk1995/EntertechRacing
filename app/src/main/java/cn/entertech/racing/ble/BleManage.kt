@@ -28,12 +28,12 @@ object BleManage {
         failure: ((String) -> Unit)? = null
     ) {
         val bleConnectManager = getBleConnectManager(device)
-        bleConnectManager.connectDevice(
+        /*bleConnectManager.connectDevice(
             successConnect,
             failure,
             ConnectionBleStrategy.SCAN_AND_CONNECT_HIGH_SIGNAL
-        )
-       /* val mac = when (device) {
+        )*/
+        val mac = when (device) {
             Device.Track -> {
                 SetItemTrackFactory.getValue()
             }
@@ -50,7 +50,7 @@ object BleManage {
             mac = mac,
             successConnect = successConnect,
             failure = failure
-        )*/
+        )
     }
 
     fun disconnectDevice(
