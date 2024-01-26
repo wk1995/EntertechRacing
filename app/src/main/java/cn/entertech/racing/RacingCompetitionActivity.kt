@@ -1,7 +1,8 @@
 package cn.entertech.racing
 
 import android.content.Intent
-import android.graphics.drawable.PictureDrawable
+import android.graphics.drawable.Animatable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -11,7 +12,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import cn.entertech.racing.base.BaseActivity
 import cn.entertech.racing.log.EntertechRacingLog
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.caverock.androidsvg.SVG
+import com.caverock.androidsvg.SVGImageView
+import com.caverock.androidsvg.SVGParseException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -68,10 +75,61 @@ class RacingCompetitionActivity : BaseActivity() {
         tvCompetitionFinish?.setOnClickListener(this)
         tvCompetitionHandBand?.setOnClickListener(this)
         ivCompetitionSetting?.setOnClickListener(this)
+       /* ivCompetitionStatus?.apply {
+            Glide.with(this).load(R.drawable.racing_rate_bg).into(this)
+        }*/
 
-        val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
+        /*try {
+            val svgInputStream = resources.openRawResource(R.raw.racing_rate_bg)
+            val svg = SVG.getFromInputStream(svgInputStream)
+            ivCompetitionStatus?.setLayerType(
+                ImageView.LAYER_TYPE_SOFTWARE,
+                null
+            ) // Required for animated SVGs
+
+            // 使用 Glide 显示 SVG
+            val requestOptions = RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE) // Disable disk caching for SVGs
+            ivCompetitionStatus?.apply {
+                Glide.with(this@RacingCompetitionActivity)
+                    .load(svg.renderToPicture())
+                    .apply(requestOptions)
+                    .into(this)
+            }
+
+        } catch (e: SVGParseException) {
+            e.printStackTrace()
+        }*/
+
+        /*try{
+            val  svg = SVG.getFromResource(this, R.drawable.racing_rate_bg)
+            ivCompetitionStatus?.setSVG(svg)
+
+            // 将 SVG 对象设置到 ImageView 中
+            ivCompetitionStatus?.setImageDrawable(PictureDrawable(svg.renderToPicture()))
+
+            // 创建一个简单的旋转动画
+            ivCompetitionStatus?.apply {
+                val animator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
+                animator.duration = 5000 // 设置动画持续时间为5秒
+
+                animator.repeatCount = ObjectAnimator.INFINITE // 设置动画无限循环
+
+                animator.start() // 启动动画
+            }
+
+        } catch (e : SVGParseException) {
+        }*/
+      /*  val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
         val pictureDrawable = PictureDrawable(svg.renderToPicture())
-        ivCompetitionStatus?.setImageDrawable(pictureDrawable)
+        ivCompetitionStatus?.setImageDrawable(pictureDrawable)*/
+
+        ivCompetitionStatus?.drawable?.apply {
+            if(this is Animatable ){
+                start()
+            }
+        }
+
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.showLoading.collect {
                 EntertechRacingLog.d(TAG, "showLoading $it mLoadingDialog $mLoadingDialog")
@@ -198,6 +256,10 @@ class RacingCompetitionActivity : BaseActivity() {
             }
         }
     }
+
+
+
+
 
     override fun onResume() {
         super.onResume()

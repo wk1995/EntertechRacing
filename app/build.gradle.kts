@@ -49,4 +49,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
     implementation("cn.entertech.android:affective-offline-sdk-flowtime:1.2.0-debug")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    annotationProcessor ("com.caverock:androidsvg:1.4")
+
+
+
 }

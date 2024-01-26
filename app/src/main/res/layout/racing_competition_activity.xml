@@ -65,7 +65,7 @@
         android:id="@+id/ivCompetitionStatus"
         android:layout_width="704dp"
         android:layout_height="@dimen/d316dp"
-        android:src="@drawable/racing_rate_bg"
+        app:srcCompat="@drawable/animated"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
