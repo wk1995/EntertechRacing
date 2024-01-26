@@ -7,15 +7,15 @@ import cn.entertech.racing.setting.ISettingItemFactory
 
 abstract class BaseHeadBandFactory : ISettingItemFactory<String>() {
 
-    companion object{
+    companion object {
         private const val TAG = "HeadBandFactory"
     }
 
 
-    override fun getValue(): String = memoryValue ?: SharedPreferencesUtil.getString(
+    override fun getValue(): String = memoryValue?.uppercase() ?: SharedPreferencesUtil.getString(
         getKey(),
         getDefault()
-    ) ?: getDefault()
+    )?.uppercase() ?: getDefault()
 
     override fun saveValue(t: String): Boolean {
         return try {
@@ -34,12 +34,12 @@ abstract class BaseHeadBandFactory : ISettingItemFactory<String>() {
     }
 
     override fun showDialog(context: BaseActivity, change: () -> Unit) {
-        EditMacAddressDialog {
+        EditMacAddressDialog ({
             if (it != memoryValue) {
                 if (saveValue(it)) {
                     change()
                 }
             }
-        }.show(context.supportFragmentManager, "")
+        },getValue()).show(context.supportFragmentManager, "")
     }
 }
