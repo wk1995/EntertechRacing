@@ -236,14 +236,17 @@ class RacingCompetitionViewModel : ViewModel() {
             }
             initAllAffectiveService()
             getHeadbandDevice().forEach {
-                BleManage.startBrainCollection(it)
+                BleManage.startBrainCollection(it, success = { byteArray ->
+                    EntertechRacingLog.d(TAG, "startBrainCollection success $it ")
+                }, failure = {
+                    EntertechRacingLog.e(TAG, "startBrainCollection failure $it ")
+                })
             }
             //开始到计时
             // 设置定时器，参数依次为总时间（毫秒）、间隔时间（毫秒）
             competitionCountDownTimer =
                 object : CountDownTimer(SettingTimeEachRound.getValue().toLong() * 1000, 1000) {
                     override fun onTick(millisUntilFinished: Long) {
-                        EntertechRacingLog.d(TAG, "$millisUntilFinished: ${Thread.currentThread()}")
                         viewModelScope.launch {
                             _remainingTime.emit(remainTimeToString(millisUntilFinished))
                         }
@@ -297,6 +300,10 @@ class RacingCompetitionViewModel : ViewModel() {
 
     /**
      * 结束竞速
+     * 停止蓝牙脑波数据采集
+     * 停止本地算法 脑波数据订阅
+     * 释放本地算法sdk
+     * 关闭本地算法连接
      * @param isAuto 是否是自动退出 true 自动退出
      * */
     fun finishCompetition(isAuto: Boolean) {
@@ -315,7 +322,11 @@ class RacingCompetitionViewModel : ViewModel() {
             competitionCountDownTimer?.cancel()
             competitionCountDownTimer = null
             getHeadbandDevice().forEach {
-                BleManage.stopBrainCollection(it)
+                BleManage.stopBrainCollection(it, success = { byteArray ->
+                    EntertechRacingLog.d(TAG, "stopBrainCollection success $it ${ThreadUtils.currentIsMain()}")
+                }, failure = {
+                    EntertechRacingLog.e(TAG, "stopBrainCollection failure $it ${ThreadUtils.currentIsMain()}")
+                })
                 EntertechRacingLog.d(TAG, "$it unSubscribeData")
                 AffectiveManage.unSubscribeData(
                     it, listener = if (it == Device.Red) {
@@ -458,12 +469,25 @@ class RacingCompetitionViewModel : ViewModel() {
         var listener = deviceRawDataListenerMap[device]
         if (listener == null) {
             listener = {
-                if (AffectiveManage.hasConnectAffectiveService(device) && AffectiveManage.hasStartAffectiveService(
-                        device
-                    )
+                EntertechRacingLog.d(
+                    TAG,
+                    "getRawData: $device isMainThread ${ThreadUtils.currentIsMain()}"
+                )
+//
+                if (AffectiveManage.hasConnectAffectiveService(device)
+                    && AffectiveManage.hasStartAffectiveService(device)
                 ) {
                     EntertechRacingLog.d(TAG, "$device appendData")
                     AffectiveManage.appendData(device, it)
+                } else {
+                   /* EntertechRacingLog.e(
+                        TAG,
+                        "hasConnectAffectiveService ${AffectiveManage.hasConnectAffectiveService(device)}  hasStartAffectiveService ${
+                            AffectiveManage.hasStartAffectiveService(
+                                device
+                            )
+                        }"
+                    )*/
                 }
 
             }
@@ -476,10 +500,10 @@ class RacingCompetitionViewModel : ViewModel() {
         var listener = deviceContactListenerMap[device]
         if (listener == null) {
             listener = {
-                EntertechRacingLog.d(
+               /* EntertechRacingLog.d(
                     TAG,
                     "$device ContactListener isMainThread ${Thread.currentThread() == Looper.getMainLooper().thread}"
-                )
+                )*/
                 if (it == 0) {
                     //佩戴好了
                 } else {
