@@ -42,9 +42,14 @@ class RacingCompetitionViewModel : ViewModel() {
     companion object {
         const val BUNDLE_KEY_DEVICE_TYPE = "deviceType"
         private const val TAG = "RacingCompetitionViewModel"
+        const val BUNDLE_KEY_BLUE_SCORE = "bundle_key_blue_score"
+        const val BUNDLE_KEY_RED_SCORE = "bundle_key_red_score"
     }
 
     private var number = 0
+
+    private var blueScoreList = ArrayList<Int>()
+    private var redScoreList = ArrayList<Int>()
 
     /**
      * 比赛倒计时
@@ -234,7 +239,9 @@ class RacingCompetitionViewModel : ViewModel() {
             viewModelScope.launch {
                 _racingStatus.emit(RacingStatus.COMPETITIONING)
             }
-            initAllAffectiveService()
+            blueScoreList.clear()
+            redScoreList.clear()
+//            initAllAffectiveService()
             getHeadbandDevice().forEach {
                 BleManage.startBrainCollection(it, success = { byteArray ->
                     EntertechRacingLog.d(TAG, "startBrainCollection success $it ")
@@ -323,9 +330,15 @@ class RacingCompetitionViewModel : ViewModel() {
             competitionCountDownTimer = null
             getHeadbandDevice().forEach {
                 BleManage.stopBrainCollection(it, success = { byteArray ->
-                    EntertechRacingLog.d(TAG, "stopBrainCollection success $it ${ThreadUtils.currentIsMain()}")
+                    EntertechRacingLog.d(
+                        TAG,
+                        "stopBrainCollection success $it ${ThreadUtils.currentIsMain()}"
+                    )
                 }, failure = {
-                    EntertechRacingLog.e(TAG, "stopBrainCollection failure $it ${ThreadUtils.currentIsMain()}")
+                    EntertechRacingLog.e(
+                        TAG,
+                        "stopBrainCollection failure $it ${ThreadUtils.currentIsMain()}"
+                    )
                 })
                 EntertechRacingLog.d(TAG, "$it unSubscribeData")
                 AffectiveManage.unSubscribeData(
@@ -422,12 +435,15 @@ class RacingCompetitionViewModel : ViewModel() {
         context.startActivity(intent)
     }
 
+
     fun gotoSetting(context: Context) {
         val intent = Intent(context, SettingActivity::class.java)
         intent.putExtra(
             SettingType.BUNDLE_KEY_SETTING_TYPE,
             SettingType.SETTINGS_SYSTEM.typeName
         )
+        intent.putExtra(BUNDLE_KEY_BLUE_SCORE, blueScoreList.average())
+        intent.putExtra(BUNDLE_KEY_RED_SCORE, redScoreList.average())
         context.startActivity(intent)
     }
 
@@ -480,14 +496,14 @@ class RacingCompetitionViewModel : ViewModel() {
                     EntertechRacingLog.d(TAG, "$device appendData")
                     AffectiveManage.appendData(device, it)
                 } else {
-                   /* EntertechRacingLog.e(
-                        TAG,
-                        "hasConnectAffectiveService ${AffectiveManage.hasConnectAffectiveService(device)}  hasStartAffectiveService ${
-                            AffectiveManage.hasStartAffectiveService(
-                                device
-                            )
-                        }"
-                    )*/
+                    /* EntertechRacingLog.e(
+                         TAG,
+                         "hasConnectAffectiveService ${AffectiveManage.hasConnectAffectiveService(device)}  hasStartAffectiveService ${
+                             AffectiveManage.hasStartAffectiveService(
+                                 device
+                             )
+                         }"
+                     )*/
                 }
 
             }
@@ -500,10 +516,10 @@ class RacingCompetitionViewModel : ViewModel() {
         var listener = deviceContactListenerMap[device]
         if (listener == null) {
             listener = {
-               /* EntertechRacingLog.d(
-                    TAG,
-                    "$device ContactListener isMainThread ${Thread.currentThread() == Looper.getMainLooper().thread}"
-                )*/
+                /* EntertechRacingLog.d(
+                     TAG,
+                     "$device ContactListener isMainThread ${Thread.currentThread() == Looper.getMainLooper().thread}"
+                 )*/
                 if (it == 0) {
                     //佩戴好了
                 } else {
