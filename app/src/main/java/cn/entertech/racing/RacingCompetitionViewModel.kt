@@ -296,12 +296,14 @@ class RacingCompetitionViewModel : ViewModel() {
                 override fun run() {
                     // 在主线程中更新 UI
                     viewModelScope.launch(Dispatchers.Main) {
+                        val sb = StringBuilder()
                         val byteArray = ByteArray(4)
                         byteArray[0] = if (redArrayData.isNotEmpty()) {
                             redArrayData.removeFirst().toByte()
                         } else {
                             TrackRedThreshold.getValue().toByte()
                         }
+                        sb.append(byteArray[0]).append(",")
                         byteArray[1] = Integer.valueOf(50).toByte()
                         byteArray[2] = if (blueArrayData.isNotEmpty()) {
                             blueArrayData.removeFirst().toByte()
@@ -309,6 +311,10 @@ class RacingCompetitionViewModel : ViewModel() {
                             TrackBlueThreshold.getValue().toByte()
                         }
                         byteArray[3] = Integer.valueOf(50).toByte()
+                        sb.append(byteArray[1]).append(",")
+                        sb.append(byteArray[2]).append(",")
+                        sb.append(byteArray[3])
+                        EntertechRacingLog.d(TAG, "send data: $sb")
                         BleManage.sendData(Device.Track, byteArray)
                     }
                 }

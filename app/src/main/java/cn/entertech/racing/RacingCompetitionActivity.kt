@@ -1,8 +1,6 @@
 package cn.entertech.racing
 
 import android.content.Intent
-import android.graphics.drawable.Animatable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -12,13 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import cn.entertech.racing.base.BaseActivity
 import cn.entertech.racing.log.EntertechRacingLog
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import com.caverock.androidsvg.SVG
-import com.caverock.androidsvg.SVGImageView
-import com.caverock.androidsvg.SVGParseException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -48,7 +39,6 @@ class RacingCompetitionActivity : BaseActivity() {
     private var tvRacingErrorBlueConnected: TextView? = null
     private var tvRacingErrorTrackConnected: TextView? = null
     private var tvRacingErrorRedConnected: TextView? = null
-    private var mLoadingDialog: LoadingDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.racing_competition_activity)
@@ -75,9 +65,9 @@ class RacingCompetitionActivity : BaseActivity() {
         tvCompetitionFinish?.setOnClickListener(this)
         tvCompetitionHandBand?.setOnClickListener(this)
         ivCompetitionSetting?.setOnClickListener(this)
-       /* ivCompetitionStatus?.apply {
-            Glide.with(this).load(R.drawable.racing_rate_bg).into(this)
-        }*/
+        /* ivCompetitionStatus?.apply {
+             Glide.with(this).load(R.drawable.racing_rate_bg).into(this)
+         }*/
 
         /*try {
             val svgInputStream = resources.openRawResource(R.raw.racing_rate_bg)
@@ -120,31 +110,33 @@ class RacingCompetitionActivity : BaseActivity() {
 
         } catch (e : SVGParseException) {
         }*/
-      /*  val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
-        val pictureDrawable = PictureDrawable(svg.renderToPicture())
-        ivCompetitionStatus?.setImageDrawable(pictureDrawable)*/
+        /*  val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
+          val pictureDrawable = PictureDrawable(svg.renderToPicture())
+          ivCompetitionStatus?.setImageDrawable(pictureDrawable)*/
 
-        ivCompetitionStatus?.drawable?.apply {
-            if(this is Animatable ){
-                start()
-            }
-        }
+        /* ivCompetitionStatus?.drawable?.apply {
+             if(this is Animatable ){
+                 start()
+             }
+         }*/
 
-        lifecycleScope.launch(Dispatchers.Main) {
+        /*lifecycleScope.launch(Dispatchers.Main) {
             viewModel.showLoading.collect {
+                var mLoadingDialog: LoadingDialog? =
+                    supportFragmentManager.findFragmentByTag("LoadingDialog") as LoadingDialog?
                 EntertechRacingLog.d(TAG, "showLoading $it mLoadingDialog $mLoadingDialog")
-                /*  if (it) {
-                      if (mLoadingDialog == null) {
-                          mLoadingDialog = LoadingDialog()
-                      }
-                      if (mLoadingDialog?.isShowing() != true) {
-                          mLoadingDialog?.show(supportFragmentManager, "")
-                      }
-                  } else {
-                      mLoadingDialog?.dismiss()
-                  }*/
+                if (it) {
+                    if (mLoadingDialog == null) {
+                        mLoadingDialog = LoadingDialog()
+                    }
+                    if (mLoadingDialog?.isShowing() != true) {
+                        mLoadingDialog?.show(supportFragmentManager, "LoadingDialog")
+                    }
+                } else {
+                    mLoadingDialog?.dismiss()
+                }
             }
-        }
+        }*/
 
 
 
@@ -256,9 +248,6 @@ class RacingCompetitionActivity : BaseActivity() {
             }
         }
     }
-
-
-
 
 
     override fun onResume() {
