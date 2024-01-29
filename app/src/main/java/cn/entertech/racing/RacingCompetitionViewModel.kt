@@ -241,14 +241,8 @@ class RacingCompetitionViewModel : ViewModel() {
             }
             blueScoreList.clear()
             redScoreList.clear()
-//            initAllAffectiveService()
-            getHeadbandDevice().forEach {
-                BleManage.startBrainCollection(it, success = { byteArray ->
-                    EntertechRacingLog.d(TAG, "startBrainCollection success $it ")
-                }, failure = {
-                    EntertechRacingLog.e(TAG, "startBrainCollection failure $it ")
-                })
-            }
+            initAllAffectiveService()
+            ergodicStartBrainCollection(getHeadbandDevice(), 0)
             //开始到计时
             // 设置定时器，参数依次为总时间（毫秒）、间隔时间（毫秒）
             competitionCountDownTimer =
@@ -323,23 +317,14 @@ class RacingCompetitionViewModel : ViewModel() {
             task = null
             //停止定时器
             sendDataTime?.cancel()
-            sendDataTime?.purge();
+            sendDataTime?.purge()
             sendDataTime = null
             //关闭倒计时
             competitionCountDownTimer?.cancel()
             competitionCountDownTimer = null
-            getHeadbandDevice().forEach {
-                BleManage.stopBrainCollection(it, success = { byteArray ->
-                    EntertechRacingLog.d(
-                        TAG,
-                        "stopBrainCollection success $it ${ThreadUtils.currentIsMain()}"
-                    )
-                }, failure = {
-                    EntertechRacingLog.e(
-                        TAG,
-                        "stopBrainCollection failure $it ${ThreadUtils.currentIsMain()}"
-                    )
-                })
+            val list = getHeadbandDevice()
+            ergodicStopBrainCollection(list, 0)
+            list.forEach {
                 EntertechRacingLog.d(TAG, "$it unSubscribeData")
                 AffectiveManage.unSubscribeData(
                     it, listener = if (it == Device.Red) {
@@ -350,6 +335,7 @@ class RacingCompetitionViewModel : ViewModel() {
                         null
                     }
                 )
+
                 AffectiveManage.finishAffectiveService(it,
                     object : IFinishAffectiveServiceListener {
                         override fun finishAffectiveFail(error: Error?) {
@@ -372,8 +358,50 @@ class RacingCompetitionViewModel : ViewModel() {
                     })
             }
         }
+    }
+
+    private fun ergodicStartBrainCollection(list: List<Device>, index: Int) {
+        if (index >= list.size) {
+            return
+        }
+        val currentDevice = list[index]
+        BleManage.startBrainCollection(currentDevice, success = { byteArray ->
+            EntertechRacingLog.d(
+                TAG,
+                "stopBrainCollection success $currentDevice ${ThreadUtils.currentIsMain()}"
+            )
+            ergodicStartBrainCollection(list, index + 1)
+        }, failure = {
+            EntertechRacingLog.e(
+                TAG,
+                "stopBrainCollection failure $currentDevice ${ThreadUtils.currentIsMain()}"
+            )
+            ergodicStartBrainCollection(list, index + 1)
+        })
 
     }
+
+    private fun ergodicStopBrainCollection(list: List<Device>, index: Int) {
+        if (index >= list.size) {
+            return
+        }
+        val currentDevice = list[index]
+        BleManage.stopBrainCollection(currentDevice, success = { byteArray ->
+            EntertechRacingLog.d(
+                TAG,
+                "stopBrainCollection success $currentDevice ${ThreadUtils.currentIsMain()}"
+            )
+            ergodicStopBrainCollection(list, index + 1)
+        }, failure = {
+            EntertechRacingLog.e(
+                TAG,
+                "stopBrainCollection failure $currentDevice ${ThreadUtils.currentIsMain()}"
+            )
+            ergodicStopBrainCollection(list, index + 1)
+        })
+
+    }
+
 
     fun closeAffectiveServiceConnection(device: Device, isAuto: Boolean) {
         EntertechRacingLog.d(
