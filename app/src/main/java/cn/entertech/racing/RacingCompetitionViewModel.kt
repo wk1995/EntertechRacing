@@ -349,6 +349,8 @@ class RacingCompetitionViewModel : ViewModel() {
         if (_racingStatus.value == RacingStatus.COMPETITIONING) {
             viewModelScope.launch {
                 _showLoading.emit(true)
+                _blueAttention.emit(0)
+                _redAttention.emit(0)
             }
             task?.cancel()
             task = null
