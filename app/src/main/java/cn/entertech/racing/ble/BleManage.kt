@@ -13,7 +13,7 @@ import cn.entertech.racing.track.SetItemTrackFactory
 object BleManage {
 
     private val bleConnectManagerMap by lazy {
-        HashMap<Device, BaseBleConnectManager>()
+        HashMap<String, BaseBleConnectManager>()
     }
 
     fun deviceIsConnect(device: Device) = getBleConnectManager(device).isConnected()
@@ -23,9 +23,11 @@ object BleManage {
         getBleConnectManager(device).findConnectedDevice()
     }
 
+    var connectDeviceCallback: ((Device) -> Unit)? = null
+
+
     fun connectDevice(
-        device: Device, successConnect: ((String) -> Unit)? = null,
-        failure: ((String) -> Unit)? = null
+        device: Device, callback: ((Device) -> Unit)? = null
     ) {
         val bleConnectManager = getBleConnectManager(device)
         /*bleConnectManager.connectDevice(
@@ -33,6 +35,7 @@ object BleManage {
             failure,
             ConnectionBleStrategy.SCAN_AND_CONNECT_HIGH_SIGNAL
         )*/
+        connectDeviceCallback = callback
         val mac = when (device) {
             Device.Track -> {
                 SetItemTrackFactory.getValue()
@@ -48,8 +51,8 @@ object BleManage {
         }
         bleConnectManager.scanMacAndConnect(
             mac = mac,
-            successConnect = successConnect,
-            failure = failure
+            successConnect = { connectDeviceCallback?.invoke(device) },
+            failure = { connectDeviceCallback?.invoke(device) }
         )
     }
 
@@ -73,10 +76,10 @@ object BleManage {
     }
 
     private fun getBleConnectManager(device: Device): BaseBleConnectManager {
-        var bleConnectManager = bleConnectManagerMap[device]
+        var bleConnectManager = bleConnectManagerMap[device.name]
         if (bleConnectManager == null) {
             bleConnectManager = MultipleBiomoduleBleManager(RacingApplication.getInstance())
-            bleConnectManagerMap[device] = bleConnectManager
+            bleConnectManagerMap[device.name] = bleConnectManager
         }
         return bleConnectManager
     }

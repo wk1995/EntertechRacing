@@ -2,9 +2,6 @@ package cn.entertech.racing.connect
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.entertech.ble.ConnectionBleStrategy
-import cn.entertech.ble.multiple.MultipleBiomoduleBleManager
-import cn.entertech.racing.RacingApplication
 import cn.entertech.racing.ble.BleManage
 import cn.entertech.racing.device.Device
 import cn.entertech.racing.log.EntertechRacingLog
@@ -35,48 +32,41 @@ class ConnectDeviceViewModel : ViewModel() {
     fun trackIsConnect() = BleManage.deviceIsConnect(Device.Track)
 
     fun connectBlueDevice() {
-        EntertechRacingLog.d(TAG, "connectBlueDevice")
-        BleManage.connectDevice(Device.Blue, {
-            EntertechRacingLog.d(TAG, "connect Blue success $it")
-            viewModelScope.launch {
-                _connectBlueResult.emit(Unit)
-            }
-        }, {
-            EntertechRacingLog.e(TAG, "connect Blue fail $it")
-            viewModelScope.launch {
-                _connectBlueResult.emit(Unit)
-            }
-        })
+        connectDevice(Device.Blue)
     }
 
     fun connectRedDevice() {
-        EntertechRacingLog.d(TAG, "connectRedDevice")
-        BleManage.connectDevice(Device.Red, {
-            EntertechRacingLog.d(TAG, "connect Red success $it")
-            viewModelScope.launch {
-                _connectRedResult.emit(Unit)
+        connectDevice(Device.Red)
+    }
+
+    private fun connectDevice(device: Device) {
+        EntertechRacingLog.d(TAG, "connectDevice $device")
+        device.apply {
+            BleManage.connectDevice(
+                this
+            ) {
+                viewModelScope.launch {
+                    when (it) {
+                        Device.Red -> {
+                            _connectRedResult.emit(Unit)
+                        }
+
+                        Device.Track -> {
+                            _connectTrackResult.emit(Unit)
+                        }
+
+                        Device.Blue -> {
+                            _connectBlueResult.emit(Unit)
+                        }
+                    }
+
+                }
             }
-        }, {
-            EntertechRacingLog.e(TAG, "connect Red fail $it")
-            viewModelScope.launch {
-                _connectRedResult.emit(Unit)
-            }
-        })
+        }
     }
 
     fun connectTrackDevice() {
-        EntertechRacingLog.d(TAG, "connectTrackDevice")
-        BleManage.connectDevice(Device.Track, {
-            EntertechRacingLog.i(TAG, "connect Track success $it")
-            viewModelScope.launch {
-                _connectTrackResult.emit(Unit)
-            }
-        }, {
-            EntertechRacingLog.e(TAG, "connect Track fail $it")
-            viewModelScope.launch {
-                _connectTrackResult.emit(Unit)
-            }
-        })
+        connectDevice(Device.Track)
     }
 
     fun findBlueHeadband() {
@@ -91,4 +81,9 @@ class ConnectDeviceViewModel : ViewModel() {
         BleManage.findDevice(Device.Track)
     }
 
+
+    override fun onCleared() {
+        BleManage.connectDeviceCallback = null
+        super.onCleared()
+    }
 }
