@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Timer
@@ -128,6 +129,7 @@ class RacingCompetitionViewModel : ViewModel() {
         {
             viewModelScope.launch(Dispatchers.Main) {
                 val redData = it?.realtimeAttentionData?.attention?.toInt() ?: 0
+                EntertechRacingLog.d(TAG, "red Data: $redData")
                 redArrayData.addLast(redData)
                 _redAttention.emit(
                     redData
@@ -141,6 +143,7 @@ class RacingCompetitionViewModel : ViewModel() {
         {
             viewModelScope.launch(Dispatchers.Main) {
                 val blueData = it?.realtimeAttentionData?.attention?.toInt() ?: 0
+                EntertechRacingLog.d(TAG, "blue Data: $blueData")
                 blueArrayData.addLast(blueData)
                 _blueAttention.emit(
                     blueData
@@ -157,40 +160,64 @@ class RacingCompetitionViewModel : ViewModel() {
     }
 
     private fun initAllAffectiveService() {
-        getHeadbandDevice().forEach {
-            if (AffectiveManage.hasConnectAffectiveService(it)) {
-                EntertechRacingLog.d(TAG, "$it hasConnectAffectiveService")
-                if (!AffectiveManage.hasStartAffectiveService(it)) {
-                    startAffectiveService(it)
-                } else {
-                    EntertechRacingLog.d(TAG, "$it hasStartAffectiveService")
-                }
-            } else {
-                AffectiveManage.connectAffectiveServiceConnection(it, object :
-                    IConnectionServiceListener {
-                    override fun connectionError(error: Error?) {
-                        //定时重连
-                        EntertechRacingLog.e(
-                            TAG,
-                            "$it connectAffectiveServiceConnection error $error"
-                        )
-                    }
-
-                    override fun connectionSuccess(sessionId: String?) {
-                        EntertechRacingLog.i(
-                            TAG,
-                            "$it connectAffectiveServiceConnection  $sessionId"
-                        )
-                        deviceAffectServiceSet.add(it)
-                        startAffectiveService(it)
-                    }
-                })
-            }
-
-        }
+        ergodicStartAffectiveService(getHeadbandDevice(), 0)
     }
 
-    private fun startAffectiveService(device: Device) {
+    private fun ergodicStartAffectiveService(list: List<Device>, index: Int) {
+        if (index >= list.size) {
+            return
+        }
+        val it = list[index]
+        if (AffectiveManage.hasConnectAffectiveService(it)) {
+            EntertechRacingLog.d(TAG, "$it hasConnectAffectiveService")
+            if (!AffectiveManage.hasStartAffectiveService(it)) {
+                startAffectiveService(it) {
+                    ergodicStartAffectiveService(list, index + 1)
+                }
+            } else {
+                EntertechRacingLog.d(TAG, "$it hasStartAffectiveService")
+                AffectiveManage.subscribeData(
+                    it, listener =
+                    if (it == Device.Red) {
+                        redAffectiveDataListener
+                    } else if (it == Device.Blue) {
+                        blueAffectiveDataListener
+                    } else {
+                        null
+                    }
+                )
+                ergodicStartAffectiveService(list, index + 1)
+            }
+        } else {
+            AffectiveManage.connectAffectiveServiceConnection(it, object :
+                IConnectionServiceListener {
+                override fun connectionError(error: Error?) {
+                    //定时重连
+                    EntertechRacingLog.e(
+                        TAG,
+                        "$it connectAffectiveServiceConnection error $error"
+                    )
+                }
+
+                override fun connectionSuccess(sessionId: String?) {
+                    EntertechRacingLog.i(
+                        TAG,
+                        "$it connectAffectiveServiceConnection  $sessionId"
+                    )
+                    viewModelScope.launch(Dispatchers.Main) {
+                        deviceAffectServiceSet.add(it)
+                    }
+                    startAffectiveService(it) {
+                        ergodicStartAffectiveService(list, index + 1)
+                    }
+                }
+            })
+        }
+
+    }
+
+
+    private fun startAffectiveService(device: Device, next: () -> Unit) {
         AffectiveManage.startAffectiveService(device,
             object : IStartAffectiveServiceLister {
                 override fun startAffectionFail(error: Error?) {
@@ -212,6 +239,7 @@ class RacingCompetitionViewModel : ViewModel() {
                         TAG,
                         "$device startFail error $error"
                     )
+                    next()
                 }
 
                 override fun startSuccess() {
@@ -226,6 +254,7 @@ class RacingCompetitionViewModel : ViewModel() {
                             null
                         }
                     )
+                    next()
                 }
             })
     }
@@ -517,23 +546,36 @@ class RacingCompetitionViewModel : ViewModel() {
                     TAG,
                     "getRawData: $device isMainThread ${ThreadUtils.currentIsMain()}"
                 )
-//
-                if (AffectiveManage.hasConnectAffectiveService(device)
-                    && AffectiveManage.hasStartAffectiveService(device)
-                ) {
-                    EntertechRacingLog.d(TAG, "$device appendData")
-                    AffectiveManage.appendData(device, it)
-                } else {
-                    /* EntertechRacingLog.e(
-                         TAG,
-                         "hasConnectAffectiveService ${AffectiveManage.hasConnectAffectiveService(device)}  hasStartAffectiveService ${
-                             AffectiveManage.hasStartAffectiveService(
-                                 device
-                             )
-                         }"
-                     )*/
-                }
+                viewModelScope.launch {
+                    val canAppend = withContext(Dispatchers.Main) {
+                        EntertechRacingLog.d(
+                            TAG,
+                            "canAppend isMainThread ${ThreadUtils.currentIsMain()}"
+                        )
+                        AffectiveManage.hasConnectAffectiveService(device)
+                                && AffectiveManage.hasStartAffectiveService(device)
+                    }
 
+                    if (canAppend) {
+                        launch(Dispatchers.IO) {
+                            EntertechRacingLog.d(
+                                TAG,
+                                "$device appendData isMainThread ${ThreadUtils.currentIsMain()}"
+                            )
+                            AffectiveManage.appendData(device, it)
+                        }
+
+                    } else {
+                        /* EntertechRacingLog.e(
+                        TAG,
+                        "hasConnectAffectiveService ${AffectiveManage.hasConnectAffectiveService(device)}  hasStartAffectiveService ${
+                            AffectiveManage.hasStartAffectiveService(
+                                device
+                            )
+                        }"
+                    )*/
+                    }
+                }
             }
             deviceRawDataListenerMap[device] = listener
         }
@@ -566,25 +608,25 @@ class RacingCompetitionViewModel : ViewModel() {
     }
 
     fun listenerHeadbandRawData() {
-        listOf(Device.Red, Device.Blue).forEach {
+        getHeadbandDevice().forEach {
             BleManage.addDeviceRawDataListener(it, getRawDataListener(it))
         }
     }
 
     fun removeHeadbandRawDataListener() {
-        listOf(Device.Red, Device.Blue).forEach {
+        getHeadbandDevice().forEach {
             BleManage.addDeviceRawDataListener(it, getRawDataListener(it))
         }
     }
 
     fun listenerHeadbandContactStatus() {
-        listOf(Device.Red, Device.Blue).forEach {
+        getHeadbandDevice().forEach {
             BleManage.addContactListener(it, getContactListener(it))
         }
     }
 
     fun removeHeadbandContactStatus() {
-        listOf(Device.Red, Device.Blue).forEach {
+        getHeadbandDevice().forEach {
             BleManage.removeContactListener(it, getContactListener(it))
         }
     }
