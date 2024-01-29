@@ -306,13 +306,13 @@ class RacingCompetitionViewModel : ViewModel() {
                             0
                         }
                         sb.append(byteArray[0]).append(",")
-                        byteArray[1] = Integer.valueOf(50).toByte()
+                        byteArray[1] = TrackRedThreshold.getValue().toByte()
                         byteArray[2] = if (blueArrayData.isNotEmpty()) {
                             blueArrayData.removeFirst().toByte()
                         } else {
                             0
                         }
-                        byteArray[3] = Integer.valueOf(50).toByte()
+                        byteArray[3] = TrackBlueThreshold.getValue().toByte()
                         sb.append(byteArray[1]).append(",")
                         sb.append(byteArray[2]).append(",")
                         sb.append(byteArray[3])
