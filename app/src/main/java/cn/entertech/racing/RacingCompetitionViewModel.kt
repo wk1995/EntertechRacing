@@ -130,6 +130,7 @@ class RacingCompetitionViewModel : ViewModel() {
             viewModelScope.launch(Dispatchers.Main) {
                 val redData = it?.realtimeAttentionData?.attention?.toInt() ?: 0
                 EntertechRacingLog.d(TAG, "red Data: $redData")
+                redScoreList.add(redData)
                 redArrayData.addLast(redData)
                 _redAttention.emit(
                     redData
@@ -143,6 +144,7 @@ class RacingCompetitionViewModel : ViewModel() {
         {
             viewModelScope.launch(Dispatchers.Main) {
                 val blueData = it?.realtimeAttentionData?.attention?.toInt() ?: 0
+                blueScoreList.add(blueData)
                 EntertechRacingLog.d(TAG, "blue Data: $blueData")
                 blueArrayData.addLast(blueData)
                 _blueAttention.emit(
@@ -301,14 +303,14 @@ class RacingCompetitionViewModel : ViewModel() {
                         byteArray[0] = if (redArrayData.isNotEmpty()) {
                             redArrayData.removeFirst().toByte()
                         } else {
-                            TrackRedThreshold.getValue().toByte()
+                            0
                         }
                         sb.append(byteArray[0]).append(",")
                         byteArray[1] = Integer.valueOf(50).toByte()
                         byteArray[2] = if (blueArrayData.isNotEmpty()) {
                             blueArrayData.removeFirst().toByte()
                         } else {
-                            TrackBlueThreshold.getValue().toByte()
+                            0
                         }
                         byteArray[3] = Integer.valueOf(50).toByte()
                         sb.append(byteArray[1]).append(",")
@@ -320,7 +322,7 @@ class RacingCompetitionViewModel : ViewModel() {
                 }
             }
             task?.apply {
-                sendDataTime?.schedule(this, 0, 1000);
+                sendDataTime?.schedule(this, 0, 600);
             }
 
         }
@@ -498,6 +500,31 @@ class RacingCompetitionViewModel : ViewModel() {
         context.startActivity(intent)
     }
 
+    fun gotoSettlement(context: Context) {
+        val intent = Intent(
+            context,
+            SettlementActivity::class.java
+        )
+        val newBlueList = blueScoreList.filter { it != 0 }
+        val newRedList = redScoreList.filter { it != 0 }
+        intent.putExtra(
+            BUNDLE_KEY_BLUE_SCORE, if (newBlueList.isEmpty()) {
+                0
+            } else {
+                newBlueList.average().toInt()
+            }
+        )
+        intent.putExtra(
+            BUNDLE_KEY_RED_SCORE, if (newRedList.isEmpty()) {
+                0
+            } else {
+                newRedList.average().toInt()
+            }
+        )
+        context.startActivity(
+            intent
+        )
+    }
 
     fun gotoSetting(context: Context) {
         val intent = Intent(context, SettingActivity::class.java)
@@ -505,8 +532,7 @@ class RacingCompetitionViewModel : ViewModel() {
             SettingType.BUNDLE_KEY_SETTING_TYPE,
             SettingType.SETTINGS_SYSTEM.typeName
         )
-        intent.putExtra(BUNDLE_KEY_BLUE_SCORE, blueScoreList.average())
-        intent.putExtra(BUNDLE_KEY_RED_SCORE, redScoreList.average())
+
         context.startActivity(intent)
     }
 

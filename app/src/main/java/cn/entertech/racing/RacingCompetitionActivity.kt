@@ -177,12 +177,7 @@ class RacingCompetitionActivity : BaseActivity() {
 
                         RacingStatus.COMPETITION_END -> {
                             viewModel.resetCompetition()
-                            startActivity(
-                                Intent(
-                                    this@RacingCompetitionActivity,
-                                    SettlementActivity::class.java
-                                )
-                            )
+                            viewModel.gotoSettlement(this@RacingCompetitionActivity)
                         }
                     }
                 }
@@ -207,9 +202,9 @@ class RacingCompetitionActivity : BaseActivity() {
                 viewModel.redAttention.collect {
                     EntertechRacingLog.d(TAG, "redAttention: $it ")
                     if (it == 0) {
-                        tvBlueAttentionValue?.text = "--"
+                        tvRedAttentionValue?.text = "--"
                     } else {
-                        tvBlueAttentionValue?.text = it.toString()
+                        tvRedAttentionValue?.text = it.toString()
                     }
                 }
             }
