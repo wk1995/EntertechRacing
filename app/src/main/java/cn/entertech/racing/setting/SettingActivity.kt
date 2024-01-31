@@ -37,7 +37,7 @@ class SettingActivity : BaseActivity(), IRecyclerViewItemClickListener {
         ivSettingBack?.setOnClickListener(this)
         rvSettingList?.adapter = mSettingListAdapter
         rvSettingList?.layoutManager = LinearLayoutManager(this)
-        rvSettingList?.addItemDecoration(SettingItemDecoration())
+//        rvSettingList?.addItemDecoration(SettingItemDecoration())
     }
 
     override fun initData() {

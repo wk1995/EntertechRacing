@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/d28dp"
     android:layoutDirection="rtl"
+    android:layout_marginTop="@dimen/d1dp"
+    android:layout_marginBottom="@dimen/d1dp"
     android:background="#33CAC4D0"
     android:orientation="horizontal">
 

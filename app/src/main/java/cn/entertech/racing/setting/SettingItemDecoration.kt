@@ -2,13 +2,20 @@ package cn.entertech.racing.setting
 
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
 
-class SettingItemDecoration(private val transparentSpaceHeight: Int = 1) :
+class SettingItemDecoration(private val transparentSpaceHeight: Int = 100) :
     ItemDecoration() {
+    private val paint by lazy {
+        val paint= Paint()
+        paint.setColor(Color.YELLOW)
+        paint
+    }
+
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = parent.paddingLeft
         val right = parent.width - parent.paddingRight
@@ -18,9 +25,9 @@ class SettingItemDecoration(private val transparentSpaceHeight: Int = 1) :
             val params = child.layoutParams as RecyclerView.LayoutParams
             val top = child.bottom + params.bottomMargin
             val bottom = top + transparentSpaceHeight
-            val transparentDivider = ColorDrawable(Color.TRANSPARENT)
-            transparentDivider.setBounds(left, top, right, bottom)
-            transparentDivider.draw(canvas)
+//            val transparentDivider = ColorDrawable(Color.TRANSPARENT)
+//            transparentDivider.setBounds(left, top, right, bottom)
+            canvas.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), paint);
         }
     }
 }
