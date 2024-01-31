@@ -163,6 +163,7 @@ class RacingCompetitionActivity : BaseActivity() {
             viewModel.remainingTime.collect {
                 EntertechRacingLog.d(TAG, "remainingTime: $it ")
                 tvRemainingTime?.text = "剩余时间 $it"
+                pbCompetitionProgress?.progress = viewModel.competitionProgress
             }
         }
 

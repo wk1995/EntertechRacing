@@ -69,7 +69,8 @@ class RacingCompetitionViewModel : ViewModel() {
 
     private val _showLoading = MutableStateFlow(false)
     val showLoading = _showLoading.asStateFlow()
-
+    var competitionProgress = 0
+        private set
     /**
      * 更新UI
      * */
@@ -276,10 +277,13 @@ class RacingCompetitionViewModel : ViewModel() {
             ergodicStartBrainCollection(getHeadbandDevice(), 0)
             //开始到计时
             // 设置定时器，参数依次为总时间（毫秒）、间隔时间（毫秒）
+            val totalTime = SettingTimeEachRound.getValue().toLong() * 1000
             competitionCountDownTimer =
                 object : CountDownTimer(SettingTimeEachRound.getValue().toLong() * 1000, 1000) {
                     override fun onTick(millisUntilFinished: Long) {
                         viewModelScope.launch {
+                            competitionProgress =
+                                ((millisUntilFinished * 1.0 / totalTime) * 100).toInt()
                             _remainingTime.emit(remainTimeToString(millisUntilFinished))
                         }
                     }
