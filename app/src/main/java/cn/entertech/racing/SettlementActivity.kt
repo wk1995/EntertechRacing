@@ -2,6 +2,7 @@ package cn.entertech.racing
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import cn.entertech.racing.base.BaseActivity
 import cn.entertech.racing.log.EntertechRacingLog
@@ -24,6 +25,8 @@ class SettlementActivity : BaseActivity() {
     private var tvSettlementOrder: TextView? = null
     private var tvAvgAttentionValueOne: TextView? = null
     private var tvAvgAttentionValueTwo: TextView? = null
+    private var pbScoreProgressOne: ProgressBar? = null
+    private var pbScoreProgressTwo: ProgressBar? = null
     override fun getLayoutResID() = R.layout.racing_settlement_activity
 
     override fun initView() {
@@ -35,6 +38,7 @@ class SettlementActivity : BaseActivity() {
         tvAvgAttentionValueOne = includeSettlementOne?.findViewById(R.id.tvAvgAttentionValue)
         ivOrderOne?.setImageResource(R.drawable.racing_settlement_number_one)
         ivHeadbandOne = includeSettlementOne?.findViewById(R.id.ivHeadband)
+        pbScoreProgressOne = includeSettlementOne?.findViewById(R.id.pbScoreProgress)
 
 
         includeSettlementTwo = findViewById(R.id.includeSettlementTwo)
@@ -42,6 +46,7 @@ class SettlementActivity : BaseActivity() {
         ivOrderTwo = includeSettlementTwo?.findViewById(R.id.ivOrder)
         ivOrderTwo?.setImageResource(R.drawable.racing_settlement_number_two)
         ivHeadbandTwo = includeSettlementTwo?.findViewById(R.id.ivHeadband)
+        pbScoreProgressTwo = includeSettlementTwo?.findViewById(R.id.pbScoreProgress)
         tvBack?.setOnClickListener(this)
     }
 
@@ -52,41 +57,56 @@ class SettlementActivity : BaseActivity() {
         EntertechRacingLog.d(TAG, "redScore: $redScore blueScore $blueScore")
         if (redScore == 0) {
             if (blueScore == 0) {
-//出问题了
+                //出问题了
+                ivHeadbandOne?.setImageResource(R.drawable.settlement_item_red_text)
+                ivHeadbandTwo?.setImageResource(R.drawable.settlement_item_blue_text)
+                tvAvgAttentionValueOne?.text = redScore.toString()
+                pbScoreProgressOne?.progress = 0
+                tvAvgAttentionValueTwo?.text = blueScore.toString()
+                pbScoreProgressTwo?.progress = 0
+                ivOrderTwo?.setImageResource(R.drawable.racing_settlement_number_one)
             } else {
-//只有blue头环
-                tvSettlementOrder?.text="1"
+                //只有blue头环
+                tvSettlementOrder?.text = "1"
                 ivHeadbandOne?.setImageResource(R.drawable.settlement_item_blue_text)
                 tvAvgAttentionValueOne?.text = blueScore.toString()
+                pbScoreProgressOne?.progress = blueScore
                 includeSettlementTwo?.visibility = View.GONE
             }
         } else {
             if (blueScore == 0) {
-//只有red头环
-                tvSettlementOrder?.text="1"
+                //只有red头环
+                tvSettlementOrder?.text = "1"
                 ivHeadbandOne?.setImageResource(R.drawable.settlement_item_red_text)
                 tvAvgAttentionValueOne?.text = redScore.toString()
+                pbScoreProgressOne?.progress = redScore
                 includeSettlementTwo?.visibility = View.GONE
             } else {
                 //两个头环
-                tvSettlementOrder?.text="2"
+                tvSettlementOrder?.text = "2"
                 if (redScore > blueScore) {
                     ivHeadbandOne?.setImageResource(R.drawable.settlement_item_red_text)
                     ivHeadbandTwo?.setImageResource(R.drawable.settlement_item_blue_text)
                     tvAvgAttentionValueOne?.text = redScore.toString()
+                    pbScoreProgressOne?.progress = redScore
                     tvAvgAttentionValueTwo?.text = blueScore.toString()
+                    pbScoreProgressTwo?.progress = blueScore
                     ivOrderTwo?.setImageResource(R.drawable.racing_settlement_number_two)
                 } else if (redScore < blueScore) {
                     ivHeadbandOne?.setImageResource(R.drawable.settlement_item_blue_text)
                     ivHeadbandTwo?.setImageResource(R.drawable.settlement_item_red_text)
                     tvAvgAttentionValueOne?.text = blueScore.toString()
+                    pbScoreProgressOne?.progress = blueScore
                     tvAvgAttentionValueTwo?.text = redScore.toString()
+                    pbScoreProgressTwo?.progress = redScore
                     ivOrderTwo?.setImageResource(R.drawable.racing_settlement_number_two)
                 } else {
                     ivHeadbandOne?.setImageResource(R.drawable.settlement_item_red_text)
                     ivHeadbandTwo?.setImageResource(R.drawable.settlement_item_blue_text)
                     tvAvgAttentionValueOne?.text = redScore.toString()
+                    pbScoreProgressOne?.progress = redScore
                     tvAvgAttentionValueTwo?.text = blueScore.toString()
+                    pbScoreProgressTwo?.progress = blueScore
                     ivOrderTwo?.setImageResource(R.drawable.racing_settlement_number_one)
                 }
             }

@@ -17,14 +17,17 @@
         tools:src="@drawable/settlement_item_blue_text" />
 
     <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/pbScoreProgress"
+        style="@style/racingSettlementProgress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/d3dp"
         android:layout_marginStart="@dimen/d8dp"
         android:layout_marginEnd="@dimen/d8dp"
+        android:layout_marginBottom="@dimen/d7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:progress="50" />
 
     <TextView
         android:id="@+id/tvAvgAttentionValue"
@@ -52,9 +55,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/d4dp"
+        android:layout_marginBottom="@dimen/d5dp"
         android:text="@string/racing_attention_avg"
         android:textColor="@color/white"
         android:textSize="@dimen/s8sp"
+        app:layout_constraintBottom_toTopOf="@id/pbScoreProgress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAvgAttentionValue" />
