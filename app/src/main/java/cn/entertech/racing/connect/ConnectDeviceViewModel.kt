@@ -48,6 +48,7 @@ class ConnectDeviceViewModel : ViewModel() {
                 viewModelScope.launch {
                     when (it) {
                         Device.Red -> {
+                            BleManage.startBrainCollection(it)
                             _connectRedResult.emit(Unit)
                         }
 
@@ -56,10 +57,10 @@ class ConnectDeviceViewModel : ViewModel() {
                         }
 
                         Device.Blue -> {
+                            BleManage.startBrainCollection(it)
                             _connectBlueResult.emit(Unit)
                         }
                     }
-
                 }
             }
         }

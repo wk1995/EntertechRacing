@@ -71,6 +71,7 @@ class RacingCompetitionViewModel : ViewModel() {
     val showLoading = _showLoading.asStateFlow()
     var competitionProgress = 0
         private set
+
     /**
      * 更新UI
      * */
@@ -101,11 +102,11 @@ class RacingCompetitionViewModel : ViewModel() {
     private val _racingStatus = MutableStateFlow(RacingStatus.PRE_COMPETITION)
     val racingStatus = _racingStatus.asStateFlow()
 
-    private val _blueIsWear = MutableStateFlow(true)
+    private val _blueIsWear = MutableStateFlow(false)
     val blueIsWear = _blueIsWear.asStateFlow()
 
 
-    private val _redIsWear = MutableStateFlow(true)
+    private val _redIsWear = MutableStateFlow(false)
     val redIsWear = _redIsWear.asStateFlow()
 
 
@@ -124,6 +125,10 @@ class RacingCompetitionViewModel : ViewModel() {
 
     private val deviceContactListenerMap by lazy {
         HashMap<Device, (Int) -> Unit>()
+    }
+
+    private val deviceContractRecordMap by lazy {
+        HashMap<String, Int>()
     }
 
     private val redAffectiveDataListener: (RealtimeAffectiveData?) -> Unit by lazy {
@@ -274,7 +279,7 @@ class RacingCompetitionViewModel : ViewModel() {
             blueScoreList.clear()
             redScoreList.clear()
             initAllAffectiveService()
-            ergodicStartBrainCollection(getHeadbandDevice(), 0)
+//            ergodicStartBrainCollection(getHeadbandDevice(), 0)
             //开始到计时
             // 设置定时器，参数依次为总时间（毫秒）、间隔时间（毫秒）
             val totalTime = SettingTimeEachRound.getValue().toLong() * 1000
@@ -351,6 +356,7 @@ class RacingCompetitionViewModel : ViewModel() {
     fun finishCompetition(isAuto: Boolean) {
         EntertechRacingLog.d(TAG, "finishCompetition")
         if (_racingStatus.value == RacingStatus.COMPETITIONING) {
+            competitionProgress = 0
             viewModelScope.launch {
                 _showLoading.emit(true)
                 _blueAttention.emit(0)
@@ -550,8 +556,8 @@ class RacingCompetitionViewModel : ViewModel() {
 
     private fun hasTrackMac(): Boolean = SetItemTrackFactory.getValue().isNotEmpty()
 
-    fun blueIsConnected(): Boolean = true
-    fun redIsConnected(): Boolean = true
+    fun blueIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Blue)
+    fun redIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Red)
     fun trackIsConnected(): Boolean = true
 
 
@@ -624,15 +630,38 @@ class RacingCompetitionViewModel : ViewModel() {
         var listener = deviceContactListenerMap[device]
         if (listener == null) {
             listener = {
-                /* EntertechRacingLog.d(
-                     TAG,
-                     "$device ContactListener isMainThread ${Thread.currentThread() == Looper.getMainLooper().thread}"
-                 )*/
-                if (it == 0) {
-                    //佩戴好了
-                } else {
+                viewModelScope.launch(Dispatchers.Main) {
+                    if (it == 0) {
+                        //佩戴好了
+                        var record =
+                            deviceContractRecordMap[device.name]
+                        if (record == null) {
+                            record = 1
+                        } else {
+                            record++
+                        }
+                        if (record == 5) {
+                            record = 0
+                            if (device == Device.Blue) {
+                                _blueIsWear.emit(true)
+                            }
+                            if (device == Device.Red) {
+                                _redIsWear.emit((true))
+                            }
+                        }
+                        deviceContractRecordMap[device.name] = record
+                    } else {
+                        deviceContractRecordMap[device.name] = 0
+                        if (device == Device.Blue) {
+                            _blueIsWear.emit(false)
+                        }
 
+                        if (device == Device.Red) {
+                            _redIsWear.emit((false))
+                        }
+                    }
                 }
+
             }
             deviceContactListenerMap[device] = listener
         }

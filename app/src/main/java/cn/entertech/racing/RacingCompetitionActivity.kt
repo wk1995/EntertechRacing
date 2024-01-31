@@ -183,10 +183,10 @@ class RacingCompetitionActivity : BaseActivity() {
             viewModel.redIsWear.collect {
                 if (viewModel.redIsConnected()) {
                     if (it) {
-                        tvRacingErrorBlueConnected?.visibility = View.GONE
+                        tvRacingErrorRedConnected?.visibility = View.GONE
                     } else {
-                        tvRacingErrorBlueConnected?.visibility = View.VISIBLE
-                        tvRacingErrorBlueConnected?.setText(R.string.racing_error_headband_wear)
+                        tvRacingErrorRedConnected?.visibility = View.VISIBLE
+                        tvRacingErrorRedConnected?.setText(R.string.racing_error_headband_wear)
                     }
                 }
             }

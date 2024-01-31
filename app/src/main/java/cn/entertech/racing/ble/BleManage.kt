@@ -26,6 +26,7 @@ object BleManage {
     var connectDeviceCallback: ((Device) -> Unit)? = null
 
 
+    @Synchronized
     fun connectDevice(
         device: Device, callback: ((Device) -> Unit)? = null
     ) {
