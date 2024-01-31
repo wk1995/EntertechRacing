@@ -1,7 +1,9 @@
 package cn.entertech.racing.base
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +14,9 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import cn.entertech.racing.R
+import cn.entertech.racing.log.EntertechRacingLog
 
 
 open class BaseDialogFragment() : DialogFragment(), OnClickListener {
@@ -32,6 +36,7 @@ open class BaseDialogFragment() : DialogFragment(), OnClickListener {
     ): View? {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        isCancelable = canCancel()
         val rootView = inflater.inflate(R.layout.set_time_dialog, container, false)
         initView(rootView)
         return rootView
@@ -48,10 +53,26 @@ open class BaseDialogFragment() : DialogFragment(), OnClickListener {
         }
 
         tvDialogTitle = rootView.findViewById(R.id.tvDialogTitle)
+        tvDialogTitle?.visibility = if (showTitleAble()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
         tvDialogCancel = rootView.findViewById(R.id.tvDialogCancel)
         tvDialogOk = rootView.findViewById(R.id.tvDialogOk)
         tvDialogOk?.setOnClickListener(this)
         tvDialogCancel?.setOnClickListener(this)
+        tvDialogOk?.visibility = if (showOkButton()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        tvDialogCancel?.visibility = if (showCancelButton()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 
     open fun getContainResId() = -1
@@ -88,5 +109,43 @@ open class BaseDialogFragment() : DialogFragment(), OnClickListener {
 
     }
 
+    open fun showTitleAble() = true
+
+    open fun showOkButton() = true
+    open fun showCancelButton() = true
+
+    open fun canCancel() = true
+
+
     fun isShowing() = dialog?.isShowing == true
+
+
+    override fun onDestroyView() {
+        flDialogContain?.removeAllViews()
+        super.onDestroyView()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        EntertechRacingLog.d(TAG, "$this onDismiss")
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+    }
+
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+            if (manager.isDestroyed) return
+        }
+        try {
+            //在每个add事务前增加一个remove事务，防止连续的add
+            manager.beginTransaction().remove(this).commit()
+            super.show(manager, tag)
+        } catch (e: Exception) {
+            //同一实例使用不同的tag会异常，这里捕获一下
+            e.printStackTrace()
+        }
+    }
 }

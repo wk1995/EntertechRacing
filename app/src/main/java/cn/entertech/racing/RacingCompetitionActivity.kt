@@ -23,6 +23,8 @@ class RacingCompetitionActivity : BaseActivity() {
         private const val TAG = "RacingCompetitionActivity"
     }
 
+    private var mLoadingDialog: LoadingDialog? = null
+
     private val viewModel: RacingCompetitionViewModel by lazy {
         ViewModelProvider(this)[RacingCompetitionViewModel::class.java]
     }
@@ -44,8 +46,7 @@ class RacingCompetitionActivity : BaseActivity() {
         setContentView(R.layout.racing_competition_activity)
         initView()
     }
-    var mLoadingDialog: LoadingDialog? =
-        supportFragmentManager.findFragmentByTag("LoadingDialog") as LoadingDialog?
+
 
     override fun initView() {
         ivCompetitionStatus = findViewById(R.id.ivCompetitionStatus)
@@ -122,22 +123,20 @@ class RacingCompetitionActivity : BaseActivity() {
              }
          }*/
 
-        /*lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             viewModel.showLoading.collect {
-
                 EntertechRacingLog.d(TAG, "showLoading $it mLoadingDialog $mLoadingDialog")
                 if (it) {
-                    if (mLoadingDialog == null) {
-                        mLoadingDialog = LoadingDialog()
-                    }
                     if (mLoadingDialog?.isShowing() != true) {
                         mLoadingDialog?.show(supportFragmentManager, "LoadingDialog")
                     }
                 } else {
-                    mLoadingDialog?.dismiss()
+                    if (mLoadingDialog?.isShowing() == true) {
+                        mLoadingDialog?.dismiss()
+                    }
                 }
             }
-        }*/
+        }
 
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.blueAttention.collect {
@@ -242,6 +241,21 @@ class RacingCompetitionActivity : BaseActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (mLoadingDialog == null) {
+            mLoadingDialog =
+                supportFragmentManager.findFragmentByTag("LoadingDialog") as LoadingDialog?
+            if (mLoadingDialog == null) {
+                mLoadingDialog = LoadingDialog()
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mLoadingDialog = null
+    }
 
     override fun onResume() {
         super.onResume()
