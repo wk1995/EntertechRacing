@@ -372,7 +372,7 @@ class RacingCompetitionViewModel : ViewModel() {
             competitionCountDownTimer?.cancel()
             competitionCountDownTimer = null
             val list = getHeadbandDevice()
-            ergodicStopBrainCollection(list, 0)
+//            ergodicStopBrainCollection(list, 0)
             list.forEach {
                 EntertechRacingLog.d(TAG, "$it unSubscribeData")
                 AffectiveManage.unSubscribeData(
@@ -586,29 +586,23 @@ class RacingCompetitionViewModel : ViewModel() {
         var listener = deviceRawDataListenerMap[device]
         if (listener == null) {
             listener = {
-                EntertechRacingLog.d(
-                    TAG,
-                    "getRawData: $device isMainThread ${ThreadUtils.currentIsMain()}"
-                )
                 viewModelScope.launch {
                     val canAppend = withContext(Dispatchers.Main) {
-                        EntertechRacingLog.d(
-                            TAG,
-                            "canAppend isMainThread ${ThreadUtils.currentIsMain()}"
-                        )
                         AffectiveManage.hasConnectAffectiveService(device)
                                 && AffectiveManage.hasStartAffectiveService(device)
                     }
+                    val isWear = if (device == Device.Blue) {
+                        _blueIsWear.value
+                    } else if (device == Device.Red) {
+                        _redIsWear.value
+                    } else {
+                        false
+                    }
 
-                    if (canAppend) {
+                    if (canAppend && isWear) {
                         launch(Dispatchers.IO) {
-                            EntertechRacingLog.d(
-                                TAG,
-                                "$device appendData isMainThread ${ThreadUtils.currentIsMain()}"
-                            )
                             AffectiveManage.appendData(device, it)
                         }
-
                     } else {
                         /* EntertechRacingLog.e(
                         TAG,
