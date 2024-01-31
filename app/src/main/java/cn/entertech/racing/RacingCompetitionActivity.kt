@@ -177,6 +177,7 @@ class RacingCompetitionActivity : BaseActivity() {
                         tvRacingErrorBlueConnected?.setText(R.string.racing_error_headband_wear)
                     }
                 }
+                updateUI()
             }
         }
         lifecycleScope.launch(Dispatchers.Main) {
@@ -189,6 +190,7 @@ class RacingCompetitionActivity : BaseActivity() {
                         tvRacingErrorRedConnected?.setText(R.string.racing_error_headband_wear)
                     }
                 }
+                updateUI()
             }
         }
 
