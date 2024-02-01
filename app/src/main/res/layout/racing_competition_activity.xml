@@ -71,6 +71,50 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/animated" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ivBlueCelebrateAnimation"
+        android:layout_width="@dimen/d150dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivCompetitionStatus"
+        app:layout_constraintStart_toStartOf="@id/ivCompetitionStatus"
+        app:layout_constraintTop_toTopOf="@id/ivCompetitionStatus"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/racing_celebrate_animation" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ivBlueCelebrateAnimation1"
+        android:layout_width="@dimen/d150dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivBlueCelebrateAnimation"
+        app:layout_constraintStart_toEndOf="@id/ivBlueCelebrateAnimation"
+        app:layout_constraintTop_toTopOf="@id/ivBlueCelebrateAnimation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/racing_celebrate_animation" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ivRedCelebrateAnimation"
+        android:layout_width="@dimen/d150dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivCompetitionStatus"
+        app:layout_constraintEnd_toEndOf="@id/ivCompetitionStatus"
+        app:layout_constraintTop_toTopOf="@id/ivCompetitionStatus"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/racing_celebrate_animation" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ivRedCelebrateAnimation1"
+        android:layout_width="@dimen/d150dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivRedCelebrateAnimation"
+        app:layout_constraintEnd_toStartOf="@id/ivRedCelebrateAnimation"
+        app:layout_constraintTop_toTopOf="@id/ivRedCelebrateAnimation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/racing_celebrate_animation" />
+
     <TextView
         android:id="@+id/tvBlueAttention"
         android:layout_width="wrap_content"

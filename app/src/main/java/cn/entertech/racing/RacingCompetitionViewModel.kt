@@ -21,6 +21,8 @@ import cn.entertech.racing.headband.RedHeadBandFactory
 import cn.entertech.racing.log.EntertechRacingLog
 import cn.entertech.racing.setting.SettingActivity
 import cn.entertech.racing.setting.SettingType
+import cn.entertech.racing.setting.item.SetItemCelebrateThreshold
+import cn.entertech.racing.setting.item.SetItemCelebrateTime
 import cn.entertech.racing.setting.item.SettingTimeEachRound
 import cn.entertech.racing.setting.item.TrackBlueThreshold
 import cn.entertech.racing.setting.item.TrackRedThreshold
@@ -84,6 +86,12 @@ class RacingCompetitionViewModel : ViewModel() {
     private val _blueAttention = MutableStateFlow(0)
     val blueAttention = _blueAttention.asStateFlow()
 
+    private val _blueCelebrate = MutableSharedFlow<Unit>()
+    val blueCelebrate = _blueCelebrate.asSharedFlow()
+
+    private val _redCelebrate = MutableSharedFlow<Unit>()
+    val redCelebrate = _redCelebrate.asSharedFlow()
+
     /**
      * 红头环 实时 注意力
      * */
@@ -131,6 +139,9 @@ class RacingCompetitionViewModel : ViewModel() {
         HashMap<String, Int>()
     }
 
+    private var blueLastCelebrateAttentionTime = 0L
+    private var redLastCelebrateAttentionTime = 0L
+
     private val redAffectiveDataListener: (RealtimeAffectiveData?) -> Unit by lazy {
         {
             viewModelScope.launch(Dispatchers.Main) {
@@ -139,6 +150,7 @@ class RacingCompetitionViewModel : ViewModel() {
                 if (!_redIsWear.value) {
                     redData = 0
                 }
+                checkCelebrate(Device.Red, redData)
                 redScoreList.add(redData)
                 redArrayData.addLast(redData)
                 _redAttention.emit(
@@ -158,6 +170,7 @@ class RacingCompetitionViewModel : ViewModel() {
                 if (!_blueIsWear.value) {
                     blueData = 0
                 }
+                checkCelebrate(Device.Red, blueData)
                 blueScoreList.add(blueData)
                 blueArrayData.addLast(blueData)
                 _blueAttention.emit(
@@ -167,6 +180,38 @@ class RacingCompetitionViewModel : ViewModel() {
         }
     }
 
+
+    private suspend fun checkCelebrate(device: Device, attentionData: Int) {
+        if (device == Device.Red) {
+            if (attentionData >= SetItemCelebrateThreshold.getValue()) {
+                if (redLastCelebrateAttentionTime == 0L) {
+                    redLastCelebrateAttentionTime = System.currentTimeMillis()
+                } else {
+                    if (System.currentTimeMillis() - redLastCelebrateAttentionTime > SetItemCelebrateTime.getValue() * 1000) {
+                        redLastCelebrateAttentionTime = 0
+                        _redCelebrate.emit(Unit)
+                    }
+                }
+            } else {
+                redLastCelebrateAttentionTime = 0
+            }
+        }
+
+        if (device == Device.Blue) {
+            if (attentionData >= SetItemCelebrateThreshold.getValue()) {
+                if (blueLastCelebrateAttentionTime == 0L) {
+                    blueLastCelebrateAttentionTime = System.currentTimeMillis()
+                } else {
+                    if (System.currentTimeMillis() - blueLastCelebrateAttentionTime > SetItemCelebrateTime.getValue() * 1000) {
+                        blueLastCelebrateAttentionTime = 0
+                        _blueCelebrate.emit(Unit)
+                    }
+                }
+            } else {
+                blueLastCelebrateAttentionTime = 0
+            }
+        }
+    }
 
     fun resetCompetition() {
         viewModelScope.launch {

@@ -1,5 +1,6 @@
 package cn.entertech.racing
 
+import android.animation.Animator
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import cn.entertech.racing.base.BaseActivity
 import cn.entertech.racing.log.EntertechRacingLog
+import com.airbnb.lottie.LottieAnimationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,10 @@ class RacingCompetitionActivity : BaseActivity() {
     }
     private var ivCompetitionStatus: ImageView? = null
     private var ivCompetitionSetting: ImageView? = null
+    private var ivBlueCelebrateAnimation: LottieAnimationView? = null
+    private var ivBlueCelebrateAnimation1: LottieAnimationView? = null
+    private var ivRedCelebrateAnimation: LottieAnimationView? = null
+    private var ivRedCelebrateAnimation1: LottieAnimationView? = null
     private var tvCompetitionTrack: TextView? = null
     private var tvCompetitionHandBand: TextView? = null
     private var tvCompetitionFinish: TextView? = null
@@ -53,6 +59,10 @@ class RacingCompetitionActivity : BaseActivity() {
         ivCompetitionSetting = findViewById(R.id.ivCompetitionSetting)
         tvCompetitionTrack = findViewById(R.id.tvCompetitionTrack)
         tvCompetitionHandBand = findViewById(R.id.tvCompetitionHandBand)
+        ivBlueCelebrateAnimation = findViewById(R.id.ivBlueCelebrateAnimation)
+        ivRedCelebrateAnimation = findViewById(R.id.ivRedCelebrateAnimation)
+        ivBlueCelebrateAnimation1 = findViewById(R.id.ivBlueCelebrateAnimation1)
+        ivRedCelebrateAnimation1 = findViewById(R.id.ivRedCelebrateAnimation1)
         tvCompetitionFinish = findViewById(R.id.tvCompetitionFinish)
         tvBlueAttentionValue = findViewById(R.id.tvBlueAttentionValue)
         tvRedAttentionValue = findViewById(R.id.tvRedAttentionValue)
@@ -68,60 +78,62 @@ class RacingCompetitionActivity : BaseActivity() {
         tvCompetitionFinish?.setOnClickListener(this)
         tvCompetitionHandBand?.setOnClickListener(this)
         ivCompetitionSetting?.setOnClickListener(this)
-        /* ivCompetitionStatus?.apply {
-             Glide.with(this).load(R.drawable.racing_rate_bg).into(this)
-         }*/
 
-        /*try {
-            val svgInputStream = resources.openRawResource(R.raw.racing_rate_bg)
-            val svg = SVG.getFromInputStream(svgInputStream)
-            ivCompetitionStatus?.setLayerType(
-                ImageView.LAYER_TYPE_SOFTWARE,
-                null
-            ) // Required for animated SVGs
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.blueCelebrate.collect {
+                EntertechRacingLog.d(TAG, "blueCelebrate")
+                listOf(ivBlueCelebrateAnimation1, ivBlueCelebrateAnimation).forEach {
+                    it?.apply {
+                        visibility = View.VISIBLE
+                        cancelAnimation()
+                        addAnimatorListener(object : Animator.AnimatorListener {
+                            override fun onAnimationStart(animation: Animator) {
+                            }
 
-            // 使用 Glide 显示 SVG
-            val requestOptions = RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE) // Disable disk caching for SVGs
-            ivCompetitionStatus?.apply {
-                Glide.with(this@RacingCompetitionActivity)
-                    .load(svg.renderToPicture())
-                    .apply(requestOptions)
-                    .into(this)
+                            override fun onAnimationEnd(animation: Animator) {
+                                visibility = View.GONE
+                            }
+
+                            override fun onAnimationCancel(animation: Animator) {
+                            }
+
+                            override fun onAnimationRepeat(animation: Animator) {
+                            }
+                        })
+                        playAnimation()
+                    }
+                }
             }
+        }
 
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-        }*/
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.redCelebrate.collect {
+                EntertechRacingLog.d(TAG, "redCelebrate")
+                listOf(ivRedCelebrateAnimation1, ivRedCelebrateAnimation).forEach {
+                    it?.apply {
+                        visibility = View.VISIBLE
+                        cancelAnimation()
+                        addAnimatorListener(object : Animator.AnimatorListener {
+                            override fun onAnimationStart(animation: Animator) {
+                            }
 
-        /*try{
-            val  svg = SVG.getFromResource(this, R.drawable.racing_rate_bg)
-            ivCompetitionStatus?.setSVG(svg)
+                            override fun onAnimationEnd(animation: Animator) {
+                                visibility = View.GONE
+                            }
 
-            // 将 SVG 对象设置到 ImageView 中
-            ivCompetitionStatus?.setImageDrawable(PictureDrawable(svg.renderToPicture()))
+                            override fun onAnimationCancel(animation: Animator) {
+                            }
 
-            // 创建一个简单的旋转动画
-            ivCompetitionStatus?.apply {
-                val animator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
-                animator.duration = 5000 // 设置动画持续时间为5秒
+                            override fun onAnimationRepeat(animation: Animator) {
+                            }
+                        })
+                        playAnimation()
+                    }
+                }
 
-                animator.repeatCount = ObjectAnimator.INFINITE // 设置动画无限循环
-
-                animator.start() // 启动动画
             }
+        }
 
-        } catch (e : SVGParseException) {
-        }*/
-        /*  val svg = SVG.getFromResource(resources, R.raw.racing_rate_bg)
-          val pictureDrawable = PictureDrawable(svg.renderToPicture())
-          ivCompetitionStatus?.setImageDrawable(pictureDrawable)*/
-
-        /* ivCompetitionStatus?.drawable?.apply {
-             if(this is Animatable ){
-                 start()
-             }
-         }*/
 
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.showLoading.collect {

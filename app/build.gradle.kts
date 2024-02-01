@@ -51,8 +51,8 @@ dependencies {
     debugImplementation("com.squareup.leakcanary:leakcanary-android:3.0-alpha-1")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
-    annotationProcessor ("com.caverock:androidsvg:1.4")
 
+    implementation ("com.airbnb.android:lottie:4.0.0")
 
 
 }
