@@ -47,10 +47,18 @@ class RacingCompetitionViewModel : ViewModel() {
         private const val TAG = "RacingCompetitionViewModel"
         const val BUNDLE_KEY_BLUE_SCORE = "bundle_key_blue_score"
         const val BUNDLE_KEY_RED_SCORE = "bundle_key_red_score"
+
+        /**
+         * 发送注意力数据间隔时间 ms
+         * */
+        private const val SEND_ATTENTION_INTERVAL = 1200L
     }
 
     private var number = 0
 
+    /**
+     * 分数
+     * */
     private var blueScoreList = ArrayList<Int>()
     private var redScoreList = ArrayList<Int>()
 
@@ -383,7 +391,7 @@ class RacingCompetitionViewModel : ViewModel() {
                 }
             }
             task?.apply {
-                sendDataTime?.schedule(this, 0, 600);
+                sendDataTime?.schedule(this, 0, SEND_ATTENTION_INTERVAL);
             }
 
         }
