@@ -134,8 +134,11 @@ class RacingCompetitionViewModel : ViewModel() {
     private val redAffectiveDataListener: (RealtimeAffectiveData?) -> Unit by lazy {
         {
             viewModelScope.launch(Dispatchers.Main) {
-                val redData = it?.realtimeAttentionData?.attention?.toInt() ?: 0
+                var redData = it?.realtimeAttentionData?.attention?.toInt() ?: 0
                 EntertechRacingLog.d(TAG, "red Data: $redData")
+                if (!_redIsWear.value) {
+                    redData = 0
+                }
                 redScoreList.add(redData)
                 redArrayData.addLast(redData)
                 _redAttention.emit(
@@ -149,9 +152,13 @@ class RacingCompetitionViewModel : ViewModel() {
     private val blueAffectiveDataListener: (RealtimeAffectiveData?) -> Unit by lazy {
         {
             viewModelScope.launch(Dispatchers.Main) {
-                val blueData = it?.realtimeAttentionData?.attention?.toInt() ?: 0
+                var blueData = it?.realtimeAttentionData?.attention?.toInt() ?: 0
+                EntertechRacingLog.d(TAG, "blue Data: $blueData _blueIsWear ${_blueIsWear.value}")
+
+                if (!_blueIsWear.value) {
+                    blueData = 0
+                }
                 blueScoreList.add(blueData)
-                EntertechRacingLog.d(TAG, "blue Data: $blueData")
                 blueArrayData.addLast(blueData)
                 _blueAttention.emit(
                     blueData
