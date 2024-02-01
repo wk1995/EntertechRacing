@@ -610,7 +610,7 @@ class RacingCompetitionViewModel : ViewModel() {
 
     fun blueIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Blue)
     fun redIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Red)
-    fun trackIsConnected(): Boolean = true
+    fun trackIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Track)
 
 
     fun listenerAllDeviceDisconnect() {
