@@ -3,6 +3,7 @@ package cn.entertech.racing.ble
 import cn.entertech.ble.BaseBleConnectManager
 import cn.entertech.ble.ConnectionBleStrategy
 import cn.entertech.ble.multiple.MultipleBiomoduleBleManager
+import cn.entertech.ble.uid.device.headband.RacingTrackUuidManage
 import cn.entertech.racing.RacingApplication
 import cn.entertech.racing.device.Device
 import cn.entertech.racing.headband.BlueHeadBandFactory
@@ -50,11 +51,20 @@ object BleManage {
                 BlueHeadBandFactory.getValue()
             }
         }
-        bleConnectManager.scanMacAndConnect(
-            mac = mac,
-            successConnect = { connectDeviceCallback?.invoke(device) },
-            failure = { connectDeviceCallback?.invoke(device) }
-        )
+        if (device == Device.Track) {
+            bleConnectManager.connectDevice(
+                { connectDeviceCallback?.invoke(device) },
+                { connectDeviceCallback?.invoke(device) },
+                ConnectionBleStrategy.SCAN_AND_CONNECT_HIGH_SIGNAL
+            )
+        } else {
+            bleConnectManager.scanMacAndConnect(
+                mac = mac,
+                successConnect = { connectDeviceCallback?.invoke(device) },
+                failure = { connectDeviceCallback?.invoke(device) }
+            )
+        }
+
     }
 
     fun disconnectDevice(
@@ -79,7 +89,14 @@ object BleManage {
     private fun getBleConnectManager(device: Device): BaseBleConnectManager {
         var bleConnectManager = bleConnectManagerMap[device.name]
         if (bleConnectManager == null) {
-            bleConnectManager = MultipleBiomoduleBleManager(RacingApplication.getInstance())
+            if (device == Device.Track) {
+                bleConnectManager = MultipleBiomoduleBleManager(
+                    RacingApplication.getInstance(),
+                    RacingTrackUuidManage
+                )
+            } else {
+                bleConnectManager = MultipleBiomoduleBleManager(RacingApplication.getInstance())
+            }
             bleConnectManagerMap[device.name] = bleConnectManager
         }
         return bleConnectManager

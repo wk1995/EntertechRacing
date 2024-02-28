@@ -614,7 +614,7 @@ class RacingCompetitionViewModel : ViewModel() {
     private fun hasHeadbandMac(): Boolean =
         BlueHeadBandFactory.getValue().isNotEmpty() || RedHeadBandFactory.getValue().isNotEmpty()
 
-    private fun hasTrackMac(): Boolean = SetItemTrackFactory.getValue().isNotEmpty()
+    private fun hasTrackMac(): Boolean = true
 
     fun blueIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Blue)
     fun redIsConnected(): Boolean = BleManage.deviceIsConnect(Device.Red)
